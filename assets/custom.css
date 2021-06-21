@@ -1,0 +1,47 @@
+@font-face {
+  font-family: 'Coustard';
+  src: local('Coustard'),
+    url(~assets/Coustard/Coustard-Regular.ttf) format('truetype');
+}
+
+html {
+  font-family: 'Coustard';
+}
+
+.black {
+  background-color: #111827 !important;
+  color: #111827;
+}
+
+.white {
+  background-color: #fffbeb !important;
+  color: #fffbeb;
+}
+
+.purple {
+  background-color: #7c3aed !important;
+  color: #7c3aed;
+}
+
+.green {
+  background-color: #059669 !important;
+  color: #059669;
+}
+.red {
+  background-color: #dc2626 !important;
+  color: #dc2626;
+}
+.yellow {
+  background-color: #fcd34d !important;
+  color: #fcd34d;
+}
+
+.orange {
+  background-color: #f59e0b !important;
+  color: #f59e0b;
+}
+
+.blue {
+  background-color: #1d4ed8 !important;
+  color: #1d4ed8;
+}
