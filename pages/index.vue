@@ -1,25 +1,88 @@
 <template>
   <div class="p-6">
-    <h1 class="title">Walt's game</h1>
+    <h1 class="title"></h1>
     <div class="grid grid-cols-2">
       <!-- left column -->
 
       <div class="col2">
-        <span class="badge">Wait your turn...Estl is playing.</span>
-
-        <h2>Game</h2>
+        <span
+          id="mesaging"
+          class="
+            m-4
+            rounded-lg
+            py-1
+            px-2
+            text-white text-3xl
+            font-semibold
+            bg-green-600
+          "
+          >Wait your turn...Estl is playing.</span
+        >
+        <div id="dice" class="mb-4 mt-4">
+          <h2>Click the dice and drag it to the board</h2>
+          <Dice v-on:move="move" class="" />
+        </div>
         <div>
-          <span>Game Started on: 2021-06-18 22:23</span>
-          <span>Game controls: pause scratch save leave</span>
-          <h2>Players</h2>
-          <span>You</span>
-          <span>Moves: 12</span>
-          <span>Score: 34</span>
+          <span class="font-semibold">Game Started on 2021-06-18 22:23</span>
+
+          <div id="players" class="w-full border-2 border-black rounded-lg p-3">
+            <h2 class="">Players</h2>
+            <hr class="mb-2" />
+            <div class="flex">
+              <div
+                class="
+                  border-2
+                  p-2
+                  m-2
+                  border-green-200
+                  rounded-lg
+                  flex flex-col flex-1
+                "
+              >
+                <span class="font-bold text-lg">You</span>
+                <span class="mb-1 justify-between"
+                  ><span>Moves</span>
+                  <span class="text-lg font-bold">12</span></span
+                >
+                <span class="justify-between"
+                  ><span>Scrore</span>
+                  <span class="text-lg font-bold">34</span></span
+                >
+              </div>
+              <div
+                class="
+                  border-2
+                  p-2
+                  m-2
+                  border-black
+                  rounded-lg
+                  flex flex-col flex-1
+                "
+              >
+                <span class="font-bold text-lg">Estl</span>
+                <span class="mb-1 justify-between"
+                  ><span>Moves</span>
+                  <span class="text-lg font-bold">10</span></span
+                >
+                <span class="justify-between"
+                  ><span>Scrore</span>
+                  <span class="text-lg font-bold">44</span></span
+                >
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="">
-          <h2>Click the dice</h2>
-          <Dice v-on:move="move" class="flex" />
+
+        <div class="w-full mt-4">
+          <h2>Game Controls</h2>
+          <span class="flex flex-row w-full">
+            <a><SaveIcon size="1.4x" class="flex" /></a>
+            <a><TrashIcon size="1.4x" class="flex" /></a>
+            <a><PauseIcon size="1.4x" class="flex" /></a>
+            <a><LogoutIcon size="1.4x" class="flex" /></a>
+          </span>
         </div>
+
         <div class="absolute bottom-1 left-1">
           <h2>Available possibilities</h2>
           <div class="flex flex-row flex-wrap">
@@ -69,7 +132,20 @@
 </template>
 
 <script>
+import {
+  TrashIcon,
+  PauseIcon,
+  SaveIcon,
+  LogoutIcon,
+} from '@vue-hero-icons/outline'
+
 export default {
+  components: {
+    TrashIcon,
+    PauseIcon,
+    SaveIcon,
+    LogoutIcon,
+  },
   data() {
     return {
       mcolor: null,
@@ -106,8 +182,13 @@ export default {
 */
 
 h2 {
-  @apply font-bold;
+  @apply font-bold text-xl;
 }
+
+a {
+  @apply border-2 border-black rounded-md py-1 px-2 mr-2;
+}
+
 .container {
   margin: 0 auto;
   min-height: 100vh;
