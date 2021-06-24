@@ -19,7 +19,10 @@
           >Wait your turn...Estl is playing.</span
         >
         Sound {{ soundStatus }}
-        <div id="dice" class="mb-4 mt-4"></div>
+        <div id="dice" class="mb-4 mt-4">
+          <h2>Click the dice and drag it to the board</h2>
+          <Dice v-on:move="move" class="" />
+        </div>
         <div>
           <span class="font-semibold">Game Started on 2021-06-18 22:23</span>
 
@@ -28,18 +31,43 @@
             <hr class="mb-2" />
             <div class="flex">
               <div
-                v-for="p in players"
-                :key="p"
-                class="p-2 m-2 rounded-lg flex flex-col flex-1"
+                class="
+                  border-2
+                  p-2
+                  m-2
+                  border-green-200
+                  rounded-lg
+                  flex flex-col flex-1
+                "
               >
-                <span class="font-bold text-lg">{{ p.name }}</span>
+                <span class="font-bold text-lg">You</span>
                 <span class="mb-1 justify-between"
                   ><span>Moves</span>
-                  <span class="text-lg font-bold">{{ p.moves }}</span></span
+                  <span class="text-lg font-bold">12</span></span
                 >
                 <span class="justify-between"
                   ><span>Scrore</span>
-                  <span class="text-lg font-bold">{{ p.score }}</span></span
+                  <span class="text-lg font-bold">34</span></span
+                >
+              </div>
+              <div
+                class="
+                  border-2
+                  p-2
+                  m-2
+                  border-black
+                  rounded-lg
+                  flex flex-col flex-1
+                "
+              >
+                <span class="font-bold text-lg">Estl</span>
+                <span class="mb-1 justify-between"
+                  ><span>Moves</span>
+                  <span class="text-lg font-bold">10</span></span
+                >
+                <span class="justify-between"
+                  ><span>Scrore</span>
+                  <span class="text-lg font-bold">44</span></span
                 >
               </div>
             </div>
@@ -94,7 +122,7 @@
       </div>
       <!-- BOARD GAME -->
       <div class="game-board shadow flex-col col3">
-        <div class="flex w-full h-12 mb-1" :class="mcolor">&nbsp;</div>
+        <div class="yellow flex w-full h-12">&nbsp;</div>
         <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
           <div
             v-for="(c, index) in r"
@@ -103,7 +131,6 @@
             @dragover.prevent="allowDrop"
             @dragleave="dragleave"
             @drop.prevent="drop"
-            @click="click"
             class="box"
             :class="[c]"
           ></div>
@@ -133,19 +160,7 @@ export default {
   },
   data() {
     return {
-      mcolor: 'yellow',
-      colors: ['red', 'blue', 'orange', 'yellow', 'green', 'purple'],
-      dice: 1,
-      players: [
-        {
-          name: 'you',
-          is_turn: true,
-          moves: 0,
-          score: 0,
-          pool: [],
-        },
-      ],
-      current_player: 0,
+      mcolor: null,
       board: {
         1: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
         2: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
@@ -195,28 +210,12 @@ export default {
     move(e) {
       this.mcolor = e
     },
-    rollDices() {
-      let dice1 = Math.ceil(Math.random() * 6)
-      this.mcolor = this.colors[dice1 - 1]
-      setTimeout(() => {}, 10)
-    },
-    click(e) {
-      this.players[this.current_player].moves++
-      if (
-        this.board[e.target.dataset.pos.split('')[0]][
-          e.toElement.dataset.pos.split('')[1]
-        ] === '' &&
-        rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)
-      ) {
-        this.board[e.target.dataset.pos.split('')[0]][
-          e.target.dataset.pos.split('')[1]
-        ] = this.mcolor
-        this.sounds.tapCorrect.play()
-        this.rollDices()
-      } else this.sounds.tapWrong.play()
-      console.log(e.target.dataset.pos)
-    },
     drop(e) {
+      // change class of the cell
+      // e.toElement.className = 'box ' + this.mcolor
+      // or add it to the board vector
+      // this.board['2']['2'] = 'blue' to add values to board
+
       if (
         this.board[e.toElement.dataset.pos.split('')[0]][
           e.toElement.dataset.pos.split('')[1]
@@ -252,7 +251,6 @@ export default {
   }, // methods
   mounted() {
     this.init()
-    this.rollDices()
   },
 }
 </script>
