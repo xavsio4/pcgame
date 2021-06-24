@@ -114,15 +114,16 @@
       </div>
       <!-- BOARD GAME -->
       <div class="game-board shadow flex-col col3">
-        <span v-for="r in 8" :key="r" class="flex flex-row">
+        <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
           <div
-            v-for="c in 8"
-            :key="c"
-            :data-pos="r * 10 + c"
+            v-for="(c, index) in r"
+            :key="index"
+            :data-pos="idx + index"
             @dragover.prevent="allowDrop"
             @dragleave="dragleave"
             @drop.prevent="drop"
             class="box"
+            :class="[c]"
           ></div>
         </span>
       </div>
@@ -132,6 +133,7 @@
 </template>
 
 <script>
+import ruelesEngines, { rulesengine } from '~/plugins/rulesengine.js'
 import {
   TrashIcon,
   PauseIcon,
@@ -149,26 +151,50 @@ export default {
   data() {
     return {
       mcolor: null,
-      board: null,
+      board: {
+        1: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        2: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        3: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        4: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        5: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        6: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        7: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        8: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+      },
       savedClass: '',
+      firstMove: true, // start wherever you want
     }
   },
   methods: {
     move(e) {
       this.mcolor = e
-      console.log(e)
     },
     drop(e) {
-      e.toElement.className = 'box ' + this.mcolor
+      // change class of the cell
+      // e.toElement.className = 'box ' + this.mcolor
+      // or add it to the board vector
+      // this.board['2']['2'] = 'blue' to add values to board
+
+      if (
+        this.board[e.toElement.dataset.pos.split('')[0]][
+          e.toElement.dataset.pos.split('')[1]
+        ] === '' &&
+        rulesengine.rules(this.mcolor, e.toElement.dataset.pos, this.board)
+      ) {
+        this.board[e.toElement.dataset.pos.split('')[0]][
+          e.toElement.dataset.pos.split('')[1]
+        ] = this.mcolor
+      }
     },
     dragleave(e) {
       e.toElement.className = this.savedClass
     },
     allowDrop(e) {
-      console.log(e)
+      // console.log(e)
       this.savedClass = e.toElement.className
       if (e.toElement.className === 'box')
         e.toElement.className = 'box ' + 'pulsar'
+      else e.preventDefault
     },
   },
 }
