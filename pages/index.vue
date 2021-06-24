@@ -18,6 +18,7 @@
           "
           >Wait your turn...Estl is playing.</span
         >
+        Sound {{ soundStatus }}
         <div id="dice" class="mb-4 mt-4">
           <h2>Click the dice and drag it to the board</h2>
           <Dice v-on:move="move" class="" />
@@ -80,6 +81,13 @@
             <a><TrashIcon size="1.4x" class="flex" /></a>
             <a><PauseIcon size="1.4x" class="flex" /></a>
             <a><LogoutIcon size="1.4x" class="flex" /></a>
+            <button
+              id="game-btn-sound"
+              :class="['gm-sound-' + soundStatus, 'gm-' + status]"
+              @click="switchSound()"
+            >
+              Sound
+            </button>
           </span>
         </div>
 
@@ -114,6 +122,7 @@
       </div>
       <!-- BOARD GAME -->
       <div class="game-board shadow flex-col col3">
+        <div class="yellow flex w-full h-10">&nbsp;</div>
         <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
           <div
             v-for="(c, index) in r"
@@ -140,6 +149,7 @@ import {
   SaveIcon,
   LogoutIcon,
 } from '@vue-hero-icons/outline'
+import { Howl } from 'howler'
 
 export default {
   components: {
@@ -163,9 +173,40 @@ export default {
       },
       savedClass: '',
       firstMove: true, // start wherever you want
+      status: 'not-started', // Game status: 'not-started', 'paused', 'playing' or 'ended'
+      soundStatus: 'on', // Sound status: 'on' or 'off'
+      sounds: {
+        // Vars needed for sounds effects
+        tapCorrect: null,
+        tapWrong: null,
+        win: null,
+        lose: null,
+        bg: null,
+      },
     }
   },
   methods: {
+    init() {
+      // Instanciate sounds effects
+      this.sounds.tapCorrect = new Howl({
+        src: ['audio/game-tap.mp3'],
+        volume: 0.05,
+      })
+      this.sounds.tapWrong = new Howl({
+        src: ['audio/game-wrong-tap.mp3'],
+        volume: 0.15,
+      })
+      this.sounds.win = new Howl({ src: ['audio/game-win.mp3'], volume: 0.4 })
+      this.sounds.lose = new Howl({ src: ['audio/game-lose.mp3'], volume: 0.4 })
+      this.sounds.bg = new Howl({
+        src: ['audio/game-background.mp3'],
+        loop: true,
+        volume: 0.2,
+      })
+      if (this.soundStatus === 'on') {
+        this.sounds.bg.play()
+      }
+    }, // init
     move(e) {
       this.mcolor = e
     },
@@ -184,7 +225,8 @@ export default {
         this.board[e.toElement.dataset.pos.split('')[0]][
           e.toElement.dataset.pos.split('')[1]
         ] = this.mcolor
-      }
+        this.sounds.tapCorrect.play()
+      } else this.sounds.tapWrong.play()
     },
     dragleave(e) {
       e.toElement.className = this.savedClass
@@ -196,6 +238,19 @@ export default {
         e.toElement.className = 'box ' + 'pulsar'
       else e.preventDefault
     },
+    restartGame() {},
+    switchSound() {
+      if (this.soundStatus === 'on') {
+        this.soundStatus = 'off'
+        this.sounds.bg.stop()
+      } else {
+        this.soundStatus = 'on'
+        this.sounds.bg.play()
+      }
+    },
+  }, // methods
+  mounted() {
+    this.init()
   },
 }
 </script>
