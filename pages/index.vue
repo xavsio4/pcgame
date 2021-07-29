@@ -93,8 +93,21 @@
         </div>
       </div>
       <!-- BOARD GAME -->
-      <div class="game-board shadow flex-col col3">
-        <div class="flex w-full h-12 mb-1" :class="mcolor">&nbsp;</div>
+      <div class="game-board shadow flex flex-col">
+        <div id="boardhead" class="flex">
+          <div
+            class="w-1/4 h-12 m-1 rounded-xl white cursor-pointer text-black"
+          >
+            0x
+          </div>
+          <div class="w-2/4 rounded-xl h-12 m-1" :class="mcolor">&nbsp;</div>
+          <div
+            @click="switchBlack"
+            class="w-1/4 h-12 rounded-xl mb-1 bg-black cursor-pointer m-1"
+          >
+            &nbsp;
+          </div>
+        </div>
         <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
           <div
             v-for="(c, index) in r"
@@ -121,6 +134,7 @@ import {
   PauseIcon,
   SaveIcon,
   LogoutIcon,
+  PlayIcon,
 } from '@vue-hero-icons/outline'
 import { Howl } from 'howler'
 
@@ -130,11 +144,24 @@ export default {
     PauseIcon,
     SaveIcon,
     LogoutIcon,
+    PlayIcon,
   },
   data() {
     return {
+      firstMove: true, // start wherever you want
+      bonusPhase: false, // the bonus phase happens at the end of the game if you still
+      // have white tiles
       mcolor: 'yellow',
-      colors: ['red', 'blue', 'orange', 'yellow', 'green', 'purple'],
+      colors: [
+        'red',
+        'blue',
+        'orange',
+        'yellow',
+        'green',
+        'purple',
+        'black',
+        'white',
+      ],
       dice: 1,
       players: [
         {
@@ -157,16 +184,31 @@ export default {
         8: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
       },
       savedClass: '',
-      firstMove: true, // start wherever you want
+
       status: 'not-started', // Game status: 'not-started', 'paused', 'playing' or 'ended'
       soundStatus: 'on', // Sound status: 'on' or 'off'
       sounds: {
         // Vars needed for sounds effects
         tapCorrect: null,
         tapWrong: null,
+        tapBlack: null,
+        getWhite: null,
         win: null,
         lose: null,
         bg: null,
+      },
+      points: {
+        red: 2,
+        blue: 2,
+        yellow: 2,
+        orange: 1,
+        green: 1,
+        purple: 1,
+        white: 0,
+        black: -3,
+        square2: 15,
+        square3: 75,
+        square4: 180,
       },
     }
   },
@@ -188,6 +230,7 @@ export default {
         loop: true,
         volume: 0.2,
       })
+      this.sounds.bg.stop()
       if (this.soundStatus === 'on') {
         this.sounds.bg.play()
       }
@@ -200,20 +243,32 @@ export default {
       this.mcolor = this.colors[dice1 - 1]
       setTimeout(() => {}, 10)
     },
+    switchBlack() {
+      this.mcolor = 'black'
+    },
     click(e) {
+      // increment moves
       this.players[this.current_player].moves++
-      if (
-        this.board[e.target.dataset.pos.split('')[0]][
-          e.toElement.dataset.pos.split('')[1]
-        ] === '' &&
-        rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)
-      ) {
+      if (!this.firstMove) {
+        if (
+          this.board[e.target.dataset.pos.split('')[0]][
+            e.toElement.dataset.pos.split('')[1]
+          ] === '' &&
+          rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)
+        ) {
+          this.board[e.target.dataset.pos.split('')[0]][
+            e.target.dataset.pos.split('')[1]
+          ] = this.mcolor
+          this.sounds.tapCorrect.play()
+          this.score = this.score + this.points[this.mcolor]
+          this.rollDices()
+        } else this.sounds.tapWrong.play()
+      } else {
         this.board[e.target.dataset.pos.split('')[0]][
           e.target.dataset.pos.split('')[1]
         ] = this.mcolor
-        this.sounds.tapCorrect.play()
-        this.rollDices()
-      } else this.sounds.tapWrong.play()
+        this.firstMove = false
+      }
       console.log(e.target.dataset.pos)
     },
     drop(e) {
@@ -239,7 +294,9 @@ export default {
         e.toElement.className = 'box ' + 'pulsar'
       else e.preventDefault
     },
-    restartGame() {},
+    restartGame() {
+      this.init()
+    },
     switchSound() {
       if (this.soundStatus === 'on') {
         this.soundStatus = 'off'

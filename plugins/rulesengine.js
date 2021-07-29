@@ -6,12 +6,32 @@ export const rulesengine = {
     const specials = ['white', 'black']
     // primary possibilities
     const possibilities = {
-      red: ['orange', 'yellow', 'purple', 'red'],
-      blue: ['purple', 'green', 'yellow', 'blue'],
-      yellow: ['red', 'blue', 'orange', 'yellow'],
-      orange: ['red', 'yellow', 'orange'],
-      purple: ['blue', 'red', 'purple'],
-      green: ['blue', 'yellow', 'green'],
+      red: ['orange', 'purple', 'red', 'white', 'black'],
+      blue: ['purple', 'green', 'blue', 'white', 'black'],
+      yellow: ['green', 'orange', 'yellow', 'white', 'black'],
+      orange: ['red', 'yellow', 'orange', 'purple', 'white', 'green', 'black'],
+      purple: ['blue', 'red', 'purple', 'orange', 'white', 'green', 'black'],
+      green: ['blue', 'yellow', 'green', 'purple', 'white', 'orange', 'black'],
+      white: [
+        'red',
+        'blue',
+        'yellow',
+        'green',
+        'purple',
+        'orange',
+        'white',
+        'black',
+      ],
+      black: [
+        'red',
+        'blue',
+        'yellow',
+        'green',
+        'purple',
+        'orange',
+        'white',
+        'black',
+      ],
     }
     const moveok = true
 
@@ -19,7 +39,7 @@ export const rulesengine = {
 
     // Check left
     const leftPos = Number(position) - 1
-    if (leftPos > 10) {
+    if (leftPos > 10 && leftPos % 10 > 0) {
       var leftColor = board[Math.trunc(leftPos / 10)][leftPos % 10]
       if (leftColor !== '' && possibilities[color].indexOf(leftColor) === -1)
         return false
@@ -45,13 +65,27 @@ export const rulesengine = {
       if (belowColor !== '' && possibilities[color].indexOf(belowColor) === -1)
         return false
     }
-    return true
-    console.log(position)
-    console.log(color)
-    console.log(leftPos)
-    console.log(board[Math.trunc(leftPos / 10)][leftPos % 10])
+    // make sure there is an adjacent color
+    console.log(belowColor)
+    console.log(aboveColor)
+    console.log(rightColor)
     console.log(leftColor)
-    console.log(board)
-    console.log(possibilities[color].indexOf(leftColor))
+    if (
+      (belowColor === '' || typeof belowColor === 'undefined') &&
+      (aboveColor === '' || typeof aboveColor === 'undefined') &&
+      (rightColor === '' || typeof rightColor === 'undefined') &&
+      (leftColor === '' || typeof leftColor === 'undefined')
+    )
+      return false
+
+    // console.log(position)
+    // console.log(color)
+    // console.log(leftPos)
+    // console.log(board[Math.trunc(leftPos / 10)][leftPos % 10])
+    // console.log(leftColor)
+    // console.log(board)
+    // console.log(possibilities[color].indexOf(leftColor))
+
+    return true
   },
 }
