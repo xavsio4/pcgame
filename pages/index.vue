@@ -25,7 +25,7 @@
 
           <div id="players" class="w-full border-2 border-black rounded-lg p-3">
             <h2 class="">Players</h2>
-            <hr class="mb-2" />
+
             <div class="flex">
               <div
                 v-for="p in players"
@@ -41,6 +41,7 @@
                   ><span>Scrore</span>
                   <span class="text-lg font-bold">{{ p.score }}</span></span
                 >
+                <span>Tiles to go: {{ 64 - tileCount }}</span>
               </div>
             </div>
           </div>
@@ -49,17 +50,23 @@
         <div class="w-full mt-4">
           <h2>Game Controls</h2>
           <span class="flex flex-row w-full">
-            <a><SaveIcon size="1.4x" class="flex" /></a>
-            <a><TrashIcon size="1.4x" class="flex" /></a>
-            <a><PauseIcon size="1.4x" class="flex" /></a>
-            <a><LogoutIcon size="1.4x" class="flex" /></a>
-            <button
-              id="game-btn-sound"
-              :class="['gm-sound-' + soundStatus, 'gm-' + status]"
-              @click="switchSound()"
-            >
-              Sound
-            </button>
+            <a @click="init"><RefreshIcon size="1.4x" class="flex" /></a>
+
+            <a @click="switchSound()">
+              <VolumeUpIcon
+                v-if="soundStatus === 'on'"
+                size="1.4x"
+                class="flex"
+              />
+              <VolumeOffIcon
+                v-if="soundStatus !== 'on'"
+                size="1.4x"
+                class="flex"
+              />
+            </a>
+            <a class="ml-5 bg-blue-500 text-white"
+              ><PlayIcon size="1.4x" class="flex"
+            /></a>
           </span>
         </div>
 
@@ -135,6 +142,9 @@ import {
   SaveIcon,
   LogoutIcon,
   PlayIcon,
+  VolumeUpIcon,
+  VolumeOffIcon,
+  RefreshIcon,
 } from '@vue-hero-icons/outline'
 import { Howl } from 'howler'
 
@@ -145,11 +155,15 @@ export default {
     SaveIcon,
     LogoutIcon,
     PlayIcon,
+    VolumeUpIcon,
+    VolumeOffIcon,
+    RefreshIcon,
   },
   data() {
     return {
       firstMove: true, // start wherever you want
       bonusPhase: false, // the bonus phase happens at the end of the game if you still
+      tileCount: 0, // number of place tiles
       // have white tiles
       mcolor: 'yellow',
       colors: [
@@ -193,6 +207,7 @@ export default {
         tapWrong: null,
         tapBlack: null,
         getWhite: null,
+        endGame: null,
         win: null,
         lose: null,
         bg: null,
@@ -231,9 +246,25 @@ export default {
         volume: 0.2,
       })
       this.sounds.bg.stop()
-      if (this.soundStatus === 'on') {
-        this.sounds.bg.play()
+      //this.sounds.bg.play()
+
+      // re iniiate tile count
+      this.tileCount = 0
+      // clearBoard
+      this.board = {
+        1: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        2: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        3: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        4: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        5: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        6: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        7: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
+        8: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
       }
+      // first move is now true
+      this.firstMove = true
+      this.players[0].score = 0
+      this.players[0].moves = 0
     }, // init
     move(e) {
       this.mcolor = e
@@ -248,28 +279,35 @@ export default {
     },
     click(e) {
       // increment moves
-      this.players[this.current_player].moves++
-      if (!this.firstMove) {
-        if (
-          this.board[e.target.dataset.pos.split('')[0]][
-            e.toElement.dataset.pos.split('')[1]
-          ] === '' &&
-          rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)
-        ) {
+      if (this.tileCount < 64) {
+        this.players[this.current_player].moves++
+        if (!this.firstMove) {
+          if (
+            this.board[e.target.dataset.pos.split('')[0]][
+              e.toElement.dataset.pos.split('')[1]
+            ] === '' &&
+            rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)
+          ) {
+            this.board[e.target.dataset.pos.split('')[0]][
+              e.target.dataset.pos.split('')[1]
+            ] = this.mcolor
+            this.sounds.tapCorrect.play()
+            this.players[0].score =
+              this.players[0].score + this.points[this.mcolor]
+            this.tileCount++
+            this.rollDices()
+          } else this.sounds.tapWrong.play()
+        } else {
+          // the first move
           this.board[e.target.dataset.pos.split('')[0]][
             e.target.dataset.pos.split('')[1]
           ] = this.mcolor
-          this.sounds.tapCorrect.play()
-          this.score = this.score + this.points[this.mcolor]
-          this.rollDices()
-        } else this.sounds.tapWrong.play()
-      } else {
-        this.board[e.target.dataset.pos.split('')[0]][
-          e.target.dataset.pos.split('')[1]
-        ] = this.mcolor
-        this.firstMove = false
-      }
-      console.log(e.target.dataset.pos)
+          this.firstMove = false
+          this.players[0].score =
+            this.players[0].score + this.points[this.mcolor]
+          this.tileCount++
+        }
+      } else this.sounds.tapWrong.play()
     },
     drop(e) {
       if (
