@@ -21,7 +21,7 @@
         Sound {{ soundStatus }}
         <div id="dice" class="mb-4 mt-4"></div>
         <div>
-          <span class="font-semibold">Game Started on 2021-06-18 22:23</span>
+          <span class="font-semibold">00:00:00</span>
 
           <div id="players" class="w-full border-2 border-black rounded-lg p-3">
             <h2 class="">Players</h2>
@@ -71,7 +71,7 @@
         </div>
 
         <div class="absolute bottom-1 left-1">
-          <h2>Available possibilities</h2>
+          <h2>Help</h2>
           <div class="flex flex-row flex-wrap">
             <tile
               tcolor="red"
@@ -100,12 +100,23 @@
         </div>
       </div>
       <!-- BOARD GAME -->
-      <div class="game-board shadow flex flex-col">
+      <div class="game-board shadow-xl flex flex-col">
         <div id="boardhead" class="flex">
           <div
-            class="w-1/4 h-12 m-1 rounded-xl white cursor-pointer text-black"
+            class="
+              w-1/4
+              h-12
+              m-1
+              p-1
+              text-center
+              bg-white
+              rounded-xl
+              cursor-pointer
+              text-gray-400 text-3xl
+              font-black
+            "
           >
-            0x
+            {{ whiteCount }} x
           </div>
           <div class="w-2/4 rounded-xl h-12 m-1" :class="mcolor">&nbsp;</div>
           <div
@@ -135,7 +146,9 @@
 </template>
 
 <script>
-import ruelesEngines, { rulesengine } from '~/plugins/rulesengine.js'
+import RulesEngines, { rulesengine } from '~/plugins/rulesengine.js'
+import BonusEngine, { bonusengine } from '~/plugins/bonusengine.js'
+
 import {
   TrashIcon,
   PauseIcon,
@@ -164,6 +177,7 @@ export default {
       firstMove: true, // start wherever you want
       bonusPhase: false, // the bonus phase happens at the end of the game if you still
       tileCount: 0, // number of place tiles
+      whiteCount: 0,
       // have white tiles
       mcolor: 'yellow',
       colors: [
@@ -183,7 +197,7 @@ export default {
           is_turn: true,
           moves: 0,
           score: 0,
-          pool: [],
+          whites: 0,
         },
       ],
       current_player: 0,
@@ -208,6 +222,8 @@ export default {
         tapBlack: null,
         getWhite: null,
         endGame: null,
+        bonusPhase: null,
+        scoreCalc: null,
         win: null,
         lose: null,
         bg: null,
@@ -263,8 +279,10 @@ export default {
       }
       // first move is now true
       this.firstMove = true
+      // init players score
       this.players[0].score = 0
       this.players[0].moves = 0
+      this.whiteCount = 0
     }, // init
     move(e) {
       this.mcolor = e
@@ -295,13 +313,18 @@ export default {
             this.players[0].score =
               this.players[0].score + this.points[this.mcolor]
             this.tileCount++
+            // get white tiles
+            this.whiteCount =
+              this.whiteCount +
+              bonusengine.rules(this.mcolor, e.target.dataset.pos, this.board)
             this.rollDices()
           } else this.sounds.tapWrong.play()
         } else {
-          // the first move
+          // the first move section (no control)
           this.board[e.target.dataset.pos.split('')[0]][
             e.target.dataset.pos.split('')[1]
           ] = this.mcolor
+          this.sounds.tapCorrect.play()
           this.firstMove = false
           this.players[0].score =
             this.players[0].score + this.points[this.mcolor]

@@ -9,7 +9,7 @@
     ></div>
     <div
       v-if="primary"
-      class="absolute rounded-full right-2 top-2 w-2 h-2 bg-white"
+      class="absolute rounded-full right-2 top-2 w-1 h-1 bg-white"
     ></div>
   </div>
 </template>
@@ -32,8 +32,8 @@ export default {
 </script>
 <style scoped>
 .tile {
-  width: 50px;
-  height: 50px;
+  width: 20px;
+  height: 20px;
   border-radius: 10px;
   justify-content: center;
   align-items: center;
