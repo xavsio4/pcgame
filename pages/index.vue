@@ -16,7 +16,7 @@
             font-semibold
             bg-green-600
           "
-          >Wait your turn...Estl is playing.</span
+          >{{ gameMessage }}</span
         >
         Sound {{ soundStatus }}
         <div id="dice" class="mb-4 mt-4"></div>
@@ -220,6 +220,7 @@ export default {
       bonusPhase: false, // the bonus phase happens at the end of the game if you still
       tileCount: 0, // number of place tiles
       whiteCount: 0,
+      gameMessage: 'Start game by clicking on the board',
       // have white tiles
       mcolor: 'yellow',
       colors: [
@@ -255,7 +256,7 @@ export default {
       },
       savedClass: '',
 
-      status: 'not-started', // Game status: 'not-started', 'paused', 'playing' or 'ended'
+      status: 'not-started', // Game status: 'started' 'not-started', 'paused', 'playing' or 'ended'
       soundStatus: 'on', // Sound status: 'on' or 'off'
       sounds: {
         // Vars needed for sounds effects
@@ -329,6 +330,7 @@ export default {
     move(e) {
       this.mcolor = e
     },
+    movet(e) {},
     rollDices() {
       let dice1 = Math.ceil(Math.random() * 6)
       this.mcolor = this.colors[dice1 - 1]
@@ -342,12 +344,15 @@ export default {
     click(e) {
       // increment moves
       if (this.tileCount < 64) {
+        this.movet(e)
         this.players[this.current_player].moves++
         if (!this.firstMove) {
-          if (
+          var tile =
             this.board[e.target.dataset.pos.split('')[0]][
               e.toElement.dataset.pos.split('')[1]
-            ] === '' &&
+            ]
+          if (
+            tile === '' &&
             rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)
           ) {
             this.board[e.target.dataset.pos.split('')[0]][
@@ -362,9 +367,14 @@ export default {
               this.whiteCount +
               bonusengine.rules(this.mcolor, e.target.dataset.pos, this.board)
             this.rollDices()
-          } else this.sounds.tapWrong.play()
+          } else {
+            this.sounds.tapWrong.play()
+            this.players[0].score--
+          }
         } else {
           // the first move section (no control)
+          this.status = 'started'
+          this.gameMessage = 'Game Started'
           this.board[e.target.dataset.pos.split('')[0]][
             e.target.dataset.pos.split('')[1]
           ] = this.mcolor
@@ -373,8 +383,24 @@ export default {
           this.players[0].score =
             this.players[0].score + this.points[this.mcolor]
           this.tileCount++
+        } // first modve end
+        // if no more tiles and no bonuses
+      } else if (this.whiteCount === 0) {
+        this.sounds.tapWrong.play()
+        this.gameMessage = 'Games has ended'
+      } else {
+        this.gameMessage = 'Entered Bonus phase'
+        console.log('bonus phase')
+        if (rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)) {
+          this.board[e.target.dataset.pos.split('')[0]][
+            e.target.dataset.pos.split('')[1]
+          ] = this.mcolor
+          this.sounds.tapCorrect.play()
+          this.players[0].score =
+            this.players[0].score + this.points[this.mcolor]
+          this.whiteCount--
         }
-      } else this.sounds.tapWrong.play()
+      }
     },
     drop(e) {
       if (
