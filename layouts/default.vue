@@ -19,5 +19,6 @@ html {
 
 body {
   background-image: url('assets/clearwood.jpg');
+  -webkit-font-smoothing: antialiased;
 }
 </style>

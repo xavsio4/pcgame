@@ -104,6 +104,9 @@
         <div id="boardhead" class="flex">
           <div
             class="
+              group
+              inline-block
+              relative
               w-1/4
               h-12
               m-1
@@ -116,11 +119,47 @@
               font-black
             "
           >
-            {{ whiteCount }} x
+            <div @click="isOpen = !isOpen" class="inline-flex items-center">
+              {{ whiteCount }}
+              <ChevronDownIcon
+                v-if="whiteCount > 0"
+                class="float-right mt-3"
+                size="0.8x"
+              />
+            </div>
+            <ul
+              v-if="isOpen && whiteCount > 0"
+              class="absolute block rounded-lg w-5/6 bg-gray-100 pt-3 p-2"
+            >
+              <li
+                @click="switchColor('red')"
+                class="rounded-xl h-10 m-1 red"
+              ></li>
+              <li
+                @click="switchColor('blue')"
+                class="rounded-xl h-10 m-1 blue"
+              ></li>
+              <li
+                @click="switchColor('yellow')"
+                class="rounded-xl h-10 m-1 yellow"
+              ></li>
+              <li
+                @click="switchColor('orange')"
+                class="rounded-xl h-10 m-1 orange"
+              ></li>
+              <li
+                @click="switchColor('green')"
+                class="rounded-xl h-10 m-1 green"
+              ></li>
+              <li
+                @click="switchColor('purple')"
+                class="rounded-xl h-10 m-1 purple"
+              ></li>
+            </ul>
           </div>
           <div class="w-2/4 rounded-xl h-12 m-1" :class="mcolor">&nbsp;</div>
           <div
-            @click="switchBlack"
+            @click="switchColor('black')"
             class="w-1/4 h-12 rounded-xl mb-1 bg-black cursor-pointer m-1"
           >
             &nbsp;
@@ -158,6 +197,7 @@ import {
   VolumeUpIcon,
   VolumeOffIcon,
   RefreshIcon,
+  ChevronDownIcon,
 } from '@vue-hero-icons/outline'
 import { Howl } from 'howler'
 
@@ -171,9 +211,11 @@ export default {
     VolumeUpIcon,
     VolumeOffIcon,
     RefreshIcon,
+    ChevronDownIcon,
   },
   data() {
     return {
+      isOpen: false, //white tile dropdown
       firstMove: true, // start wherever you want
       bonusPhase: false, // the bonus phase happens at the end of the game if you still
       tileCount: 0, // number of place tiles
@@ -292,8 +334,10 @@ export default {
       this.mcolor = this.colors[dice1 - 1]
       setTimeout(() => {}, 10)
     },
-    switchBlack() {
-      this.mcolor = 'black'
+    switchColor(color) {
+      this.mcolor = color
+      this.isOpen = false
+      if (this.whiteCount > 0) this.whiteCount--
     },
     click(e) {
       // increment moves
