@@ -16,16 +16,17 @@ export const bonusengine = {
       whiteCount++
 
     //check vertical
-    //const vertical = position % 10
+    var found = false
+    const vertical = position % 10
+    for (var i = 1; i < 9; i++) {
+      if (board[i][vertical] === '' || board[i][vertical] === 'black') {
+        found = true
+      }
+      if (found === true) break
+    }
+
+    if (found === false) whiteCount++
 
     return whiteCount
-
-    //check square 4
-
-    //check square 3
-
-    //check square 2
-
-    // Check left
   },
 }
