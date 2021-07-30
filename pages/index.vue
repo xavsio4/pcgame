@@ -339,7 +339,7 @@ export default {
     switchColor(color) {
       this.mcolor = color
       this.isOpen = false
-      if (this.whiteCount > 0) this.whiteCount--
+      if (this.whiteCount > 0 && this.status !== 'bonus') this.whiteCount--
     },
     click(e) {
       // increment moves
@@ -390,6 +390,7 @@ export default {
         this.gameMessage = 'Games has ended'
       } else {
         this.gameMessage = 'Entered Bonus phase'
+        this.status = 'bonus'
         console.log('bonus phase')
         if (rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)) {
           this.board[e.target.dataset.pos.split('')[0]][
