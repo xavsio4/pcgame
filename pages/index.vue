@@ -229,7 +229,7 @@ export default {
       isOpen: false, //white tile dropdown
       firstMove: true, // start wherever you want
       bonusPhase: false, // the bonus phase happens at the end of the game if you still
-      tileCount: 0, // number of place tiles
+      tileCount: 1, // number of place tiles
       whiteCount: 0,
       gameMessage: 'Start game by clicking on the board',
       // have white tiles
@@ -319,7 +319,7 @@ export default {
       //this.sounds.bg.play()
 
       // re iniiate tile count
-      this.tileCount = 0
+      this.tileCount = 1
       // clearBoard
       this.board = {
         1: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
@@ -408,8 +408,8 @@ export default {
         // if no more tiles and no bonuses
       } else if (this.whiteCount === 0) {
         this.sounds.tapWrong.play()
-        this.gameMessage = 'Games has ended'
-        this.status = 'ends'
+        this.gameMessage = 'Game has ended'
+        this.status = 'end'
       } else {
         this.gameMessage = 'Entered Bonus phase'
         this.status = 'bonus'
