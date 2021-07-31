@@ -68,6 +68,14 @@
               ><PlayIcon size="1.4x" class="flex"
             /></a>
           </span>
+          <!-- modal -->
+          <modal></modal>
+        </div>
+        <!-- //controls -->
+
+        <div v-if="status === 'end'" class="text-2xl">
+          Share your colored work of art with your entourage or download it
+          <a @click="getImage">Download your work of art</a>
         </div>
 
         <div class="absolute bottom-1 left-1">
@@ -165,18 +173,20 @@
             &nbsp;
           </div>
         </div>
-        <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
-          <div
-            v-for="(c, index) in r"
-            :key="index"
-            :data-pos="idx + index"
-            @dragover.prevent="allowDrop"
-            @dragleave="dragleave"
-            @drop.prevent="drop"
-            @click="click"
-            class="box"
-            :class="[c]"
-          ></div>
+        <span id="core-board">
+          <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
+            <div
+              v-for="(c, index) in r"
+              :key="index"
+              :data-pos="idx + index"
+              @dragover.prevent="allowDrop"
+              @dragleave="dragleave"
+              @drop.prevent="drop"
+              @click="click"
+              class="box"
+              :class="[c]"
+            ></div>
+          </span>
         </span>
       </div>
       <!-- /board game -->
@@ -187,6 +197,7 @@
 <script>
 import RulesEngines, { rulesengine } from '~/plugins/rulesengine.js'
 import BonusEngine, { bonusengine } from '~/plugins/bonusengine.js'
+import domtoimage from 'dom-to-image'
 
 import {
   TrashIcon,
@@ -327,6 +338,16 @@ export default {
       this.players[0].moves = 0
       this.whiteCount = 0
     }, // init
+    getImage() {
+      domtoimage
+        .toJpeg(document.getElementById('core-board'), { quality: 0.95 })
+        .then(function (dataUrl) {
+          var link = document.createElement('a')
+          link.download = 'primares-game.jpeg'
+          link.href = dataUrl
+          link.click()
+        })
+    },
     move(e) {
       this.mcolor = e
     },
@@ -343,7 +364,7 @@ export default {
     },
     click(e) {
       // increment moves
-      if (this.tileCount < 64) {
+      if (this.tileCount < 63) {
         this.movet(e)
         this.players[this.current_player].moves++
         if (!this.firstMove) {
@@ -388,6 +409,7 @@ export default {
       } else if (this.whiteCount === 0) {
         this.sounds.tapWrong.play()
         this.gameMessage = 'Games has ended'
+        this.status = 'ends'
       } else {
         this.gameMessage = 'Entered Bonus phase'
         this.status = 'bonus'
@@ -400,6 +422,10 @@ export default {
           this.players[0].score =
             this.players[0].score + this.points[this.mcolor]
           this.whiteCount--
+          if (this.whiteCount === 0) {
+            this.gameMessage = 'Game has ended'
+            this.status = 'end'
+          }
         }
       }
     },
