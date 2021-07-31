@@ -337,6 +337,7 @@ export default {
       this.players[0].score = 0
       this.players[0].moves = 0
       this.whiteCount = 0
+      this.status = 'start'
     }, // init
     getImage() {
       domtoimage
