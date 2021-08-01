@@ -411,6 +411,7 @@ export default {
         this.sounds.tapWrong.play()
         this.gameMessage = 'Game has ended'
         this.status = 'end'
+        console.log(this.board)
       } else {
         this.gameMessage = 'Entered Bonus phase'
         this.status = 'bonus'
@@ -510,7 +511,7 @@ a {
 }
 
 .box {
-  border: 1px solid #eee;
+  margin: 1px;
   background-color: #ccc;
   border-radius: 6px;
   font-family: Helvetica;
