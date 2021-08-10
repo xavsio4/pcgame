@@ -18,7 +18,7 @@
     "gsap": "^3.5.1",
     "howler": "^2.2.0",
     "nuxt": "^2.15.3",
-    "nuxt-socket-io": "^1.1.18"
+    "nuxt-socket-io": "^1.1.20"
   },
   "devDependencies": {
     "@nuxt/image": "^0.4.17",
