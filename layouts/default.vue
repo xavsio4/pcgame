@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <Nuxt />
+  <div class="safe-top safe-left safe-right safe-bottom mx-4">
+    <div class="max-h-screen h-full overflow-y-scroll">
+      <Nuxt />
+    </div>
   </div>
 </template>
 
