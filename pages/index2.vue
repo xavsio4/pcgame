@@ -29,6 +29,7 @@ export default {
   data() {
     return {
       colors: ['red', 'blue', 'green', 'yellow', 'orange', 'purple'],
+      points: [0, 0, 15, 75, 180],
       colorscount: [
         { col: 'red', count: 0, pos_start: 0, pos_end: 0 },
         { col: 'blue', count: 0, pos_start: 0, pos_end: 0 },
@@ -202,7 +203,9 @@ export default {
           'green',
         ],
       ],
+      boardCpy: [],
       results: [],
+      rembered: [],
       total: 0,
     }
   },
@@ -230,16 +233,80 @@ export default {
         } */
       }
     },
+    // deep clone an array
+    arrayClone(arr) {
+      var i, copy
+
+      if (Array.isArray(arr)) {
+        copy = arr.slice(0)
+        for (i = 0; i < copy.length; i++) {
+          copy[i] = this.arrayClone(copy[i])
+        }
+        return copy
+      } else if (typeof arr === 'object') {
+        throw 'Cannot clone array containing an object!'
+      } else {
+        return arr
+      }
+    },
+    // isolate the non adjacent tiles
+    initBinary() {
+      this.boardCpy = this.arrayClone(this.board)
+      this.board.forEach((item) => {
+        var mi = Number(this.board.indexOf(item))
+        for (let i in item) {
+          var a = Number(i)
+          // if first
+          if (a === 0 && this.board[mi][a] !== this.board[mi][a + 1]) {
+            this.boardCpy[mi][a] = 0
+          }
+          // for others
+          if (a > 0 && a < 7 && this.board[mi][a] !== this.board[mi][a + 1]) {
+            if (this.board[mi][a] !== this.board[mi][a - 1])
+              this.boardCpy[mi][a] = 0
+          }
+          //for last of the row
+          if (a === 7 && this.board[mi][a] !== this.board[mi][a - 1]) {
+            this.boardCpy[mi][a] = 0
+          }
+        }
+      })
+      console.log(this.boardCpy)
+    },
     calcResult(len) {
       let total = 0
       let iterator = 0
-      const lin = { lin: 0, col: 'null', start_pos: 0, end_pos: 0 }
-      let linsav = Object.create(lin)
+      const lin = { lin: null, col: 'null', start_pos: 0, end_pos: 0 }
+      //let linsav = Object.create(lin)
+      let linsav = [lin]
       this.results.forEach((item) => {
-        //var mi = Number(this.results.indexOf(item)) //from 0
-        console.log(item)
-        console.log(Number(item.lin) - Number(linsav.lin))
-        if (
+        var mi = Number(this.results.indexOf(item)) //from 0
+        console.log(mi)
+        for (let i in item) {
+          //var a = Number(i)
+          if (
+            item[i].start_pos === linsav[i].start_pos &&
+            item[i].end_pos === linsav[i].end_pos &&
+            item[i].col === linsav[i].col &&
+            item[i].lin - linsav[i].lin === 1
+          ) {
+            iterator++
+            this.rembered.push(mi)
+            this.rembered.push(linsav[i].lin)
+          }
+
+          if (iterator === len - 1) {
+            console.log('grille de ' + len)
+            // now remove grid
+            // this.remgrid()
+            this.total = this.total + this.points[len]
+            iterator = 0
+          }
+        } // col loop
+        linsav = [...item]
+      })
+
+      /*    if (
           Number(item.lin) - Number(linsav.lin) === 1 &&
           item.col === linsav.col &&
           item.start_pos === linsav.start_pos &&
@@ -252,61 +319,76 @@ export default {
             console.log('grille de ' + len)
             // now remove grid
             this.remgrid()
-            this.total = this.total + 75
+            this.total = this.total + this.points[len]
             iterator = 0
           }
         } else {
           iterator = 0
           linsav = item
-        }
-      })
+        } 
+      }) */
+      console.log(this.rembered)
+      this.remgrid()
+      return total
     },
+    // removes already counted bonuses
     remgrid() {
+      let unique = this.rembered.filter((c, index) => {
+        return this.rembered.indexOf(c) === index
+      }) // will remove duplicates
       this.results.forEach((item) => {
-        for (
-          let i = Number(item.start_pos);
-          i < Number(item.end_pos) + 1;
-          i++
-        ) {
-          this.binaryBoard[item.lin][i] = 0
+        for (let i in item) {
+          for (
+            let a = Number(item[i].start_pos);
+            a < Number(item[i].end_pos) + 1;
+            a++
+          ) {
+            //remove only lines that counted in bonus
+            if (unique.includes(item[i].lin)) this.boardCpy[item[i].lin][a] = 0
+          }
         }
       })
-      console.log(this.binaryBoard)
+      console.log(this.boardCpy)
+      this.rembered = []
     },
     binaried(len) {
       let total = 0
-      this.board.forEach((item) => {
+      this.results = []
+      this.boardCpy.forEach((item) => {
         let iterator = 0
-        var mi = Number(this.board.indexOf(item))
+        var mi = Number(this.boardCpy.indexOf(item))
         for (let i in item) {
-          if (Number(i) < 8 && Number(i) !== 0 && Number(i) + 1 !== 0) {
-            if (item[Number(i)] === item[Number(i) + 1]) {
-              this.binaryBoard[mi][Number(i)] = item[Number(i)]
-              this.binaryBoard[mi][Number(i) + 1] = item[Number(i) + 1]
+          var a = Number(i)
+          if (a < 7 && item[a] !== 0) {
+            if (item[a] === item[a + 1]) {
+              // this.binaryBoard[mi][a] = item[a]
+              // this.binaryBoard[mi][a + 1] = item[a + 1]
               iterator++
               if (iterator === len - 1) {
-                this.results.push({
+                if (this.results[mi] === undefined) this.results[mi] = []
+                this.results[mi].push({
                   lin: mi,
-                  col: item[Number(i)],
-                  start_pos: Number(i) - (len - 2),
-                  end_pos: Number(i) + 1,
+                  col: item[a],
+                  start_pos: a - (len - 2),
+                  end_pos: a + 1,
                 })
                 iterator = 0
               }
             } else {
-              //  if this.binaryBoard[mi][Number(i)]
-              // this.binaryBoard[mi][Number(i)] = 0
-              this.binaryBoard[mi][Number(i) + 1] = 0
               iterator = 0
             }
           }
         }
       })
-      this.total = this.calcResult(len)
+      console.log(this.results)
+      this.calcResult(len)
     },
   },
   created() {
+    this.initBinary()
     this.binaried(4)
+    this.binaried(3)
+    this.binaried(2)
   },
 }
 </script>
