@@ -284,6 +284,11 @@ export default {
         console.log(mi)
         for (let i in item) {
           //var a = Number(i)
+          console.log(item)
+          console.log(item[i])
+          console.log(linsav[i])
+          console.log(i)
+          if (linsav[i] === undefined) linsav[i] = [lin]
           if (
             item[i].start_pos === linsav[i].start_pos &&
             item[i].end_pos === linsav[i].end_pos &&
@@ -304,6 +309,7 @@ export default {
           }
         } // col loop
         linsav = [...item]
+        if (linsav === undefined) linsav = [lin]
       })
 
       /*    if (
@@ -352,6 +358,7 @@ export default {
       this.rembered = []
     },
     binaried(len) {
+      console.log('binary :value' + len)
       let total = 0
       this.results = []
       this.boardCpy.forEach((item) => {

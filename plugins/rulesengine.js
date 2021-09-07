@@ -66,10 +66,7 @@ export const rulesengine = {
         return false
     }
     // make sure there is an adjacent color
-    console.log(belowColor)
-    console.log(aboveColor)
-    console.log(rightColor)
-    console.log(leftColor)
+
     if (
       (belowColor === '' || typeof belowColor === 'undefined') &&
       (aboveColor === '' || typeof aboveColor === 'undefined') &&
@@ -87,5 +84,32 @@ export const rulesengine = {
     // console.log(possibilities[color].indexOf(leftColor))
 
     return true
+  },
+  whites: function (color, position, board) {
+    var whiteCount = 0
+
+    //check horizontal
+    const horizontal = Math.trunc(position / 10)
+    const hArr = [board[horizontal]]
+    //check for blacks or nothing
+    if (
+      !Object.values(board[horizontal]).includes('') &&
+      !Object.values(board[horizontal]).includes('black')
+    )
+      whiteCount++
+
+    //check vertical
+    var found = false
+    const vertical = position % 10
+    for (var i = 1; i < 9; i++) {
+      if (board[i][vertical] === '' || board[i][vertical] === 'black') {
+        found = true
+      }
+      if (found === true) break
+    }
+
+    if (found === false) whiteCount++
+
+    return whiteCount
   },
 }

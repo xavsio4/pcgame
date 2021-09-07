@@ -368,10 +368,12 @@ export default {
       if (this.tileCount < 63) {
         this.movet(e)
         this.players[this.current_player].moves++
+        console.log(e.target)
+        console.log(e.toElement)
         if (!this.firstMove) {
           var tile =
             this.board[e.target.dataset.pos.split('')[0]][
-              e.toElement.dataset.pos.split('')[1]
+              e.target.dataset.pos.split('')[1]
             ]
           if (
             tile === '' &&
@@ -387,7 +389,7 @@ export default {
             // get white tiles
             this.whiteCount =
               this.whiteCount +
-              bonusengine.rules(this.mcolor, e.target.dataset.pos, this.board)
+              rulesengine.whites(this.mcolor, e.target.dataset.pos, this.board)
             this.rollDices()
           } else {
             this.sounds.tapWrong.play()
@@ -425,6 +427,8 @@ export default {
             this.players[0].score + this.points[this.mcolor]
           this.whiteCount--
           if (this.whiteCount === 0) {
+            this.players[0].score =
+              this.players[0].score + bonusengine.bonus(this.board)
             this.gameMessage = 'Game has ended'
             this.status = 'end'
           }
