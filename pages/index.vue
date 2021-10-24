@@ -429,6 +429,7 @@ export default {
           if (this.whiteCount === 0) {
             this.players[0].score =
               this.players[0].score + bonusengine.bonus(this.board)
+            this.mcolor = 'blank'
             this.gameMessage = 'Game has ended'
             this.status = 'end'
           }
@@ -502,6 +503,9 @@ export default {
 }
 #core-board.cursor_yellow {
   cursor: url('~assets/yellow.png'), auto;
+}
+#core-board.cursor_black {
+  cursor: url('~assets/black.png'), auto;
 }
 
 h2 {
