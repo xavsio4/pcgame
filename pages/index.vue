@@ -173,7 +173,7 @@
             &nbsp;
           </div>
         </div>
-        <span id="core-board">
+        <span id="core-board" :class="'cursor_' + mcolor">
           <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
             <div
               v-for="(c, index) in r"
@@ -484,6 +484,25 @@ export default {
 @apply min-h-screen flex justify-center items-center text-center mx-auto;
 }
 */
+
+#core-board.cursor_red {
+  cursor: url('~assets/red.png'), auto;
+}
+#core-board.cursor_blue {
+  cursor: url('~assets/blue.png'), auto;
+}
+#core-board.cursor_orange {
+  cursor: url('~assets/orange.png'), auto;
+}
+#core-board.cursor_green {
+  cursor: url('~assets/green.png'), auto;
+}
+#core-board.cursor_purple {
+  cursor: url('~assets/purple.png'), auto;
+}
+#core-board.cursor_yellow {
+  cursor: url('~assets/yellow.png'), auto;
+}
 
 h2 {
   @apply font-bold text-xl;

@@ -210,29 +210,7 @@ export default {
     }
   },
   methods: {
-    boardCalc(len) {
-      let iterate = 0
-      let arrSearch = []
-      for (let [key, value] of Object.entries(this.board)) {
-        let intVal = 0
-
-        /*  for (let [key2, value2] of Object.entries(value)) {
-          if (key2 === 1) {
-            iterate++
-            intVal = value2
-            arrSearch.push(value2)
-          } else if (intVal === value2) {
-            arrSearch.push(value2)
-            intVal = value2
-            iterate++
-          } else {
-            iterate = 0
-            arrSearch = []
-            intVal = value2
-          }
-        } */
-      }
-    },
+    
     // deep clone an array
     arrayClone(arr) {
       var i, copy
@@ -284,10 +262,7 @@ export default {
         console.log(mi)
         for (let i in item) {
           //var a = Number(i)
-          console.log(item)
-          console.log(item[i])
-          console.log(linsav[i])
-          console.log(i)
+          
           if (linsav[i] === undefined) linsav[i] = [lin]
           if (
             item[i].start_pos === linsav[i].start_pos &&
@@ -311,29 +286,7 @@ export default {
         linsav = [...item]
         if (linsav === undefined) linsav = [lin]
       })
-
-      /*    if (
-          Number(item.lin) - Number(linsav.lin) === 1 &&
-          item.col === linsav.col &&
-          item.start_pos === linsav.start_pos &&
-          item.end_pos === linsav.end_pos
-        ) {
-          linsav = item
-          console.log(iterator)
-          iterator++
-          if (iterator === len - 1) {
-            console.log('grille de ' + len)
-            // now remove grid
-            this.remgrid()
-            this.total = this.total + this.points[len]
-            iterator = 0
-          }
-        } else {
-          iterator = 0
-          linsav = item
-        } 
-      }) */
-      console.log(this.rembered)
+      //console.log(this.rembered)
       this.remgrid()
       return total
     },
