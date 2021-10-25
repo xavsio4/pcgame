@@ -167,6 +167,7 @@
           </div>
           <div class="w-2/4 rounded-xl h-12 m-1" :class="mcolor">&nbsp;</div>
           <div
+            v-if="enabledBlack"
             @click="switchColor('black')"
             class="w-1/4 h-12 rounded-xl mb-1 bg-black cursor-pointer m-1"
           >
@@ -229,8 +230,9 @@ export default {
       isOpen: false, //white tile dropdown
       firstMove: true, // start wherever you want
       bonusPhase: false, // the bonus phase happens at the end of the game if you still
-      tileCount: 1, // number of place tiles
+      tileCount: 0, // number of place tiles
       whiteCount: 0,
+      enabledBlack: true,
       gameMessage: 'Start game by clicking on the board',
       // have white tiles
       mcolor: 'yellow',
@@ -299,6 +301,7 @@ export default {
   },
   methods: {
     init() {
+      this.enabledBlack = true
       // Instanciate sounds effects
       this.sounds.tapCorrect = new Howl({
         src: ['audio/game-tap.mp3'],
@@ -319,7 +322,7 @@ export default {
       //this.sounds.bg.play()
 
       // re iniiate tile count
-      this.tileCount = 1
+      this.tileCount = 0
       // clearBoard
       this.board = {
         1: { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '' },
@@ -365,7 +368,7 @@ export default {
     },
     click(e) {
       // increment moves
-      if (this.tileCount < 63) {
+      if (this.tileCount < 64) {
         this.movet(e)
         this.players[this.current_player].moves++
         console.log(e.target)
@@ -414,7 +417,9 @@ export default {
         this.gameMessage = 'Game has ended'
         this.status = 'end'
         console.log(this.board)
-      } else {
+      }
+      if (this.tileCount === 64 && this.whiteCount !== 0) {
+        this.enabledBlack = false
         this.gameMessage = 'Entered Bonus phase'
         this.status = 'bonus'
         console.log('bonus phase')
