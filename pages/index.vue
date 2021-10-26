@@ -19,7 +19,6 @@
               inline-block
               relative
               w-2/12
-              m-1
               p-1
               text-center
               rounded-xl
@@ -28,7 +27,7 @@
               font-black
             "
           >
-            <span @click="openmodal" class="font-semibold">00:00:00</span>
+            <span class="font-semibold">00:00:00</span>
           </div>
           <div
             class="
@@ -40,12 +39,11 @@
               justify-center
               font-bold
               leading-none
-              m-1
             "
           >
             {{ gameMessage }}
           </div>
-          <div class="w-3/12 h-12 rounded-xl">
+          <div class="w-3/12 rounded-xl">
             <span class="flex flex-row justify-center">
               <nuxt-link class="text-black cursor-pointer" to="hof"
                 >HoF</nuxt-link
@@ -170,7 +168,6 @@
               :data-pos="idx + index"
               @dragover.prevent="allowDrop"
               @dragleave="dragleave"
-              @drop.prevent="drop"
               @click="click"
               class="box"
               :class="[c]"
@@ -462,7 +459,7 @@ export default {
         this.bonusPop = 1
       }
     },
-    drop(e) {
+    /* drop(e) {
       if (
         this.board[e.toElement.dataset.pos.split('')[0]][
           e.toElement.dataset.pos.split('')[1]
@@ -474,17 +471,17 @@ export default {
         ] = this.mcolor
         this.sounds.tapCorrect.play()
       } else this.sounds.tapWrong.play()
-    },
+    }, */
     dragleave(e) {
       e.toElement.className = this.savedClass
     },
-    allowDrop(e) {
+    /*allowDrop(e) {
       // console.log(e)
       this.savedClass = e.toElement.className
       if (e.toElement.className === 'box')
         e.toElement.className = 'box ' + 'pulsar'
       else e.preventDefault
-    },
+    },*/
     restartGame() {
       this.init()
     },

@@ -48,8 +48,21 @@
             Go
           </button>
         </div>
+        <!-- <div v-if="!displayForm" class="mb-2">
+          <nuxt-link class="cursor-pointer" to="hof"
+            >Browse Hall of Fame</nuxt-link
+          >
+        </div> -->
         <button
-          class="bg-blue-500 font-bold text-white p-2 rounded cursor-pointer"
+          class="
+            bg-blue-500
+            mt-2
+            font-bold
+            text-white
+            p-2
+            rounded
+            cursor-pointer
+          "
           @click="$emit('download')"
         >
           Download grid image
