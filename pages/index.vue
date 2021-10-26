@@ -11,53 +11,86 @@
           <a @click="getImage">Download your work of art</a>
         </div>
       </div>
-      <!-- BOARD GAME -->
-      <div class="game-board shadow-xl flex flex-col">
-        <div id="boardhead" class="flex">
-          <div
-            class="
-              inline-block
-              relative
-              w-2/12
-              p-1
-              text-center
-              rounded-xl
-              cursor-pointer
-              text-gray-400 text-xl
-              font-black
-            "
-          >
-            <span class="font-semibold">00:00:00</span>
+      <!-- Outside controls -->
+      <div class="mx-auto w-4/5 p-4 inline-block">
+        <div class="flex flex-row justify-between">
+          <div class="w-4/12 md:w-3/12 float-left">
+            <div
+              class="
+                float-left
+                text-gray-700
+                bg-gray-200
+                text-center
+                p-2
+                rounded
+                font-semibold
+              "
+            >
+              00:00:00
+            </div>
           </div>
           <div
             class="
-              w-7/12
-              p-2
+              w-2/12
+              md:w-6/12
+              p-3
+              text-center
               rounded-md
               text-black
-              flex
-              justify-center
               font-bold
               leading-none
             "
           >
-            {{ gameMessage }}
+            <div class="text-center hidden md:block">
+              {{ gameMessage }}
+            </div>
           </div>
-          <div class="w-3/12 rounded-xl">
-            <span class="flex flex-row justify-center">
-              <nuxt-link class="text-black cursor-pointer" to="hof"
+          <div class="w-6/12 md:w-3/12">
+            <div class="flex flex-row">
+              <button
+                @click="$modal.show('helpmodal')"
+                title="Help"
+                class="
+                  p-2
+                  flex
+                  bg-blue-500
+                  text-white
+                  cursor-pointer
+                  rounded-md
+                  mr-2
+                "
+              >
+                <InformationCircleIcon size="1.2x" class="flex" />
+              </button>
+              <nuxt-link class="text-black flex cursor-pointer" to="hof"
                 >HoF</nuxt-link
               >
-              <a
+              <button
                 title="Restart Game"
-                class="bg-blue-500 text-white cursor-pointer"
+                class="
+                  p-2
+                  flex
+                  bg-blue-500
+                  text-white
+                  cursor-pointer
+                  rounded-md
+                "
                 @click="init"
-                ><RefreshIcon size="1.2x" class="flex"
-              /></a>
+              >
+                <RefreshIcon size="1.2x" class="flex" />
+              </button>
 
-              <a
+              <button
                 @click="switchSound()"
-                class="bg-blue-500 text-white cursor-pointer"
+                class="
+                  ml-1
+                  p-2
+                  flex
+                  bg-blue-500
+                  text-white
+                  cursor-pointer
+                  rounded-md
+                "
                 title="Toggle Sound"
               >
                 <VolumeUpIcon
@@ -70,10 +103,25 @@
                   size="1.2x"
                   class="flex"
                 />
-              </a>
-            </span>
+              </button>
+            </div>
           </div>
         </div>
+      </div>
+      <!-- BOARD GAME -->
+      <div
+        class="
+          mt-1
+          game-board
+          shadow-xl
+          flex flex-col
+          mx-auto
+          bg-gray-100
+          rounded-lg
+          border
+        "
+      >
+        <!-- Seconde head -->
         <div id="boardhead" class="flex">
           <div
             class="
@@ -144,7 +192,7 @@
             "
             :class="mcolor"
           >
-            <div class="content-center">
+            <div class="content-center hidden md:block">
               <span class="font-bold">Moves:</span>
               {{ players[0].moves }} <span class="font-bold">Scores:</span>
               {{ players[0].score }}
@@ -161,7 +209,7 @@
           </div>
         </div>
         <span id="core-board" :class="'cursor_' + mcolor">
-          <span v-for="(r, idx) in board" :key="idx" class="flex flex-row">
+          <div v-for="(r, idx) in board" :key="idx" class="flex flex-row">
             <div
               v-for="(c, index) in r"
               :key="index"
@@ -169,15 +217,35 @@
               @dragover.prevent="allowDrop"
               @dragleave="dragleave"
               @click="click"
-              class="box"
+              class="
+                m-1
+                bg-gray-200
+                rounded-lg
+                flex
+                justify-center
+                w-9
+                h-9
+                hover:bg-gray-400
+                md:w-16 md:h-16
+              "
               :class="[c]"
             ></div>
-          </span>
+          </div>
         </span>
+      </div>
+      <div class="mx-auto content-center text-lg md:hidden">
+        <span class="font-bold">Moves:</span>
+        {{ players[0].moves }} <span class="font-bold">Scores:</span>
+        {{ players[0].score }}
+        <span class="font-bold">Tiles:</span>
+        {{ 64 - tileCount }}
+      </div>
+      <div class="text-center font-bold p-2 md:hidden">
+        {{ gameMessage }}
       </div>
       <!-- /board game -->
     </div>
-    <modal name="endgame" :width="320" :height="420" :adaptive="true"
+    <modal name="endgame" :width="330" :height="440" :adaptive="true"
       ><div slot="top-right">
         <button @click="$modal.hide('endgame')">❌</button>
       </div>
@@ -188,6 +256,9 @@
         :moves="players[0].moves"
       ></end-modal
     ></modal>
+    <modal name="helpmodal" class="m-3" :adaptive="true">
+      <help-modal></help-modal>
+    </modal>
   </div>
 </template>
 
@@ -196,6 +267,7 @@ import RulesEngines, { rulesengine } from '~/plugins/rulesengine.js'
 import BonusEngine, { bonusengine } from '~/plugins/bonusengine.js'
 import domtoimage from 'dom-to-image'
 import EndModal from '~/components/EndModal.vue'
+import HelpModal from '~/components/HelpModal.vue'
 
 import {
   TrashIcon,
@@ -206,6 +278,7 @@ import {
   VolumeUpIcon,
   VolumeOffIcon,
   RefreshIcon,
+  InformationCircleIcon,
   ChevronDownIcon,
 } from '@vue-hero-icons/outline'
 import { Howl } from 'howler'
@@ -221,7 +294,9 @@ export default {
     VolumeOffIcon,
     RefreshIcon,
     ChevronDownIcon,
+    InformationCircleIcon,
     EndModal,
+    HelpModal,
   },
   data() {
     return {
@@ -548,19 +623,16 @@ a {
   text-align: center;
 }
 
-.game-board {
-  /*width: 500px;
-  height: 524px;*/
-  margin: 0 auto;
+/* .game-board {
+  @apply mx-auto bg-gray-100 rounded-lg border;
+   margin: 0 auto;
   background-color: #eee;
   color: #fff;
   border: 6px solid #eee;
   border-radius: 10px;
-  /* display: flex; */
-  /* grid-template: repeat(8, 1fr) / repeat(8, 1fr);*/
-}
+}*/
 
-.box {
+/* .box {
   margin: 1px;
   background-color: #ccc;
   border-radius: 6px;
@@ -570,13 +642,17 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 4rem;
-  height: 4rem;
+  width: 2.6rem;
+  height: 2.6rem;
+} */
+
+/*.box {
+  @apply m-1 bg-gray-200 rounded-lg flex justify-center w-10 h-10;
 }
 
 .box:hover {
   background-color: #bbb;
-}
+}*/
 
 .pulsar {
   -webkit-animation: pulse 1s infinite alternate;

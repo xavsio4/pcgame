@@ -1,5 +1,5 @@
 <template>
-  <div class="safe-top safe-left safe-right safe-bottom mx-4">
+  <div class="safe-top safe-left safe-right safe-bottom">
     <div class="max-h-screen h-full overflow-y-scroll">
       <Nuxt />
     </div>

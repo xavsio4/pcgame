@@ -8,7 +8,8 @@
         mx-auto
         bg-white
         rounded-xl
-        w-1/2
+        w-full
+        md:w-1/2
       "
     >
       <nuxt-link class="mx-auto mb-2" to="/">Back to game</nuxt-link>
