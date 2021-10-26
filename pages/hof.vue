@@ -30,10 +30,12 @@ export default {
   data() {
     return {
       scores: [],
+      loading: false,
     }
   },
   methods: {
     async readScores() {
+      this.loading = true
       const scoreRef = this.$fire.firestore
         // .collection('users')
         // .doc(this.currentUser.uid)
@@ -51,6 +53,7 @@ export default {
           return
         }
         this.scores = doc
+        this.loading = false
         // this.docEntries = doc2
         console.log(this.scores)
       } catch (e) {

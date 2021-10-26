@@ -3,14 +3,6 @@
     <div class="grid grid-cols-1">
       <!-- left column -->
 
-      <div class="flex flex-col">
-        <!-- //controls -->
-
-        <div v-if="status === 'end'" class="text-2xl">
-          Share your colored work of art with your entourage or download it
-          <a @click="getImage">Download your work of art</a>
-        </div>
-      </div>
       <!-- Outside controls -->
       <div class="mx-auto w-4/5 p-4 inline-block">
         <div class="flex flex-row justify-between">
@@ -245,10 +237,7 @@
       </div>
       <!-- /board game -->
     </div>
-    <modal name="endgame" :width="330" :height="440" :adaptive="true"
-      ><div slot="top-right">
-        <button @click="$modal.hide('endgame')">❌</button>
-      </div>
+    <modal name="endgame" :width="330" :height="440" :adaptive="true">
       <end-modal
         @close="close"
         @download="getImage"
