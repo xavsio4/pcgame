@@ -1,14 +1,109 @@
 <template>
-  <div class="p-0 md:p-6">
-    <div class="grid grid-cols-1">
+  <div class="p-6">
+    <h1 class="title"></h1>
+    <div class="grid grid-cols-2">
       <!-- left column -->
 
-      <div class="flex flex-col">
+      <div class="col2">
+        <span
+          id="mesaging"
+          class="
+            m-4
+            rounded-lg
+            py-1
+            px-2
+            text-white text-3xl
+            font-semibold
+            bg-green-600
+          "
+          >{{ gameMessage }}</span
+        >
+        Sound {{ soundStatus }}
+        <div id="dice" class="mb-4 mt-4"></div>
+        <div>
+          <span class="font-semibold">00:00:00</span>
+          <a @click="openmodal">modal</a>
+
+          <div id="players" class="w-full border-2 border-black rounded-lg p-3">
+            <h2 class="">Players</h2>
+
+            <div class="flex">
+              <div
+                v-for="p in players"
+                :key="p"
+                class="p-2 m-2 rounded-lg flex flex-col flex-1"
+              >
+                <span class="font-bold text-lg">{{ p.name }}</span>
+                <span class="mb-1 justify-between"
+                  ><span>Moves</span>
+                  <span class="text-lg font-bold">{{ p.moves }}</span></span
+                >
+                <span class="justify-between"
+                  ><span>Scrore</span>
+                  <span class="text-lg font-bold">{{ p.score }}</span></span
+                >
+                <span>Tiles to go: {{ 64 - tileCount }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full mt-4">
+          <h2>Game Controls</h2>
+          <span class="flex flex-row w-full">
+            <a class="bg-blue-500 text-white" @click="init"
+              ><RefreshIcon size="1.4x" class="flex"
+            /></a>
+
+            <a @click="switchSound()" class="bg-blue-500 text-white">
+              <VolumeUpIcon
+                v-if="soundStatus === 'on'"
+                size="1.4x"
+                class="flex"
+              />
+              <VolumeOffIcon
+                v-if="soundStatus !== 'on'"
+                size="1.4x"
+                class="flex"
+              />
+            </a>
+          </span>
+          <!-- modal -->
+        </div>
         <!-- //controls -->
 
         <div v-if="status === 'end'" class="text-2xl">
           Share your colored work of art with your entourage or download it
           <a @click="getImage">Download your work of art</a>
+        </div>
+
+        <div class="absolute bottom-1 left-1">
+          <h2>Help</h2>
+          <div class="flex flex-row flex-wrap">
+            <tile
+              tcolor="red"
+              :draggable="true"
+              v-on:move="move"
+              :primary="true"
+            ></tile>
+            <tile
+              tcolor="yellow"
+              :draggable="true"
+              v-on:move="move"
+              :primary="true"
+            ></tile>
+            <tile
+              tcolor="blue"
+              :draggable="true"
+              v-on:move="move"
+              :primary="true"
+            ></tile>
+            <tile tcolor="orange" :draggable="true" v-on:move="move"></tile>
+            <tile tcolor="purple" :draggable="true" v-on:move="move"></tile>
+            <tile tcolor="green" :draggable="true" v-on:move="move"></tile>
+            <tile tcolor="white" :draggable="true" v-on:move="move"></tile>
+            <tile tcolor="black" :draggable="true" v-on:move="move"></tile>
+          </div>
         </div>
       </div>
       <!-- BOARD GAME -->
@@ -16,73 +111,10 @@
         <div id="boardhead" class="flex">
           <div
             class="
-              inline-block
-              relative
-              w-2/12
-              m-1
-              p-1
-              text-center
-              rounded-xl
-              cursor-pointer
-              text-gray-400 text-xl
-              font-black
-            "
-          >
-            <span @click="openmodal" class="font-semibold">00:00:00</span>
-          </div>
-          <div
-            class="
-              w-7/12
-              p-2
-              rounded-md
-              text-black
-              flex
-              justify-center
-              font-bold
-              leading-none
-              m-1
-            "
-          >
-            {{ gameMessage }}
-          </div>
-          <div class="w-3/12 h-12 rounded-xl">
-            <span class="flex flex-row justify-center">
-              <nuxt-link class="text-black cursor-pointer" to="hof"
-                >HoF</nuxt-link
-              >
-              <a
-                title="Restart Game"
-                class="bg-blue-500 text-white cursor-pointer"
-                @click="init"
-                ><RefreshIcon size="1.2x" class="flex"
-              /></a>
-
-              <a
-                @click="switchSound()"
-                class="bg-blue-500 text-white cursor-pointer"
-                title="Toggle Sound"
-              >
-                <VolumeUpIcon
-                  v-if="soundStatus === 'on'"
-                  size="1.2x"
-                  class="flex"
-                />
-                <VolumeOffIcon
-                  v-if="soundStatus !== 'on'"
-                  size="1.2x"
-                  class="flex"
-                />
-              </a>
-            </span>
-          </div>
-        </div>
-        <div id="boardhead" class="flex">
-          <div
-            class="
               group
               inline-block
               relative
-              w-3/12
+              w-1/4
               h-12
               m-1
               p-1
@@ -134,11 +166,10 @@
           </div>
           <div
             class="
-              w-6/12
+              w-2/4
               bolder
               p-2
-              flex
-              justify-center
+              content-center
               text-white
               rounded-xl
               h-12
@@ -146,18 +177,13 @@
             "
             :class="mcolor"
           >
-            <div class="content-center">
-              <span class="font-bold">Moves:</span>
-              {{ players[0].moves }} <span class="font-bold">Scores:</span>
-              {{ players[0].score }}
-              <span class="font-bold">Tiles:</span>
-              {{ 64 - tileCount }}
-            </div>
+            Moves: Scores: Tiles to go :
+            {{ 64 - tileCount }}
           </div>
           <div
             v-if="enabledBlack"
             @click="switchColor('black')"
-            class="w-3/12 h-12 rounded-xl mb-1 bg-black cursor-pointer m-1"
+            class="w-1/4 h-12 rounded-xl mb-1 bg-black cursor-pointer m-1"
           >
             &nbsp;
           </div>
@@ -180,16 +206,11 @@
       </div>
       <!-- /board game -->
     </div>
-    <modal name="endgame" :width="320" :height="420" :adaptive="true"
+    <modal name="endgame" :width="320" :height="380" :adaptive="true"
       ><div slot="top-right">
         <button @click="$modal.hide('endgame')">❌</button>
       </div>
-      <end-modal
-        @close="close"
-        @download="getImage"
-        :score="players[0].score"
-        :moves="players[0].moves"
-      ></end-modal
+      <end-modal></end-modal
     ></modal>
   </div>
 </template>
@@ -228,7 +249,6 @@ export default {
   },
   data() {
     return {
-      bonusPop: 0,
       isOpen: false, //white tile dropdown
       firstMove: true, // start wherever you want
       bonusPhase: false, // the bonus phase happens at the end of the game if you still
@@ -256,7 +276,6 @@ export default {
           moves: 0,
           score: 0,
           whites: 0,
-          playtime: 0,
         },
       ],
       current_player: 0,
@@ -306,13 +325,7 @@ export default {
     openmodal() {
       this.$modal.show('endgame')
     },
-    close() {
-      this.$toast.info('You can download your grid in jpeg format.')
-      // this.$modal.hide('endgame')
-    },
     init() {
-      this.rollDices()
-      this.bonusPop = 0
       this.enabledBlack = true
       // Instanciate sounds effects
       this.sounds.tapCorrect = new Howl({
@@ -414,7 +427,6 @@ export default {
           // the first move section (no control)
           this.status = 'started'
           this.gameMessage = 'Game Started'
-          this.$toast.info('Game has started')
           this.board[e.target.dataset.pos.split('')[0]][
             e.target.dataset.pos.split('')[1]
           ] = this.mcolor
@@ -428,14 +440,12 @@ export default {
       } else if (this.whiteCount === 0) {
         this.sounds.tapWrong.play()
         this.gameMessage = 'Game has ended'
-        this.$toast.success('Game has ended')
         this.status = 'end'
         console.log(this.board)
       }
       if (this.tileCount === 64 && this.whiteCount !== 0) {
         this.enabledBlack = false
         this.gameMessage = 'Entered Bonus phase'
-
         this.status = 'bonus'
         console.log('bonus phase')
         if (rulesengine.rules(this.mcolor, e.target.dataset.pos, this.board)) {
@@ -451,15 +461,10 @@ export default {
               this.players[0].score + bonusengine.bonus(this.board)
             this.mcolor = 'blank'
             this.gameMessage = 'Game has ended'
-            this.$toast.info('Game has ended')
             this.status = 'end'
             this.$modal.show('endgame')
           }
         }
-      }
-      if (this.status === 'bonus' && this.bonusPop === 0) {
-        this.$toast.info('Entered Bonus phase')
-        this.bonusPop = 1
       }
     },
     drop(e) {
@@ -506,11 +511,10 @@ export default {
 </script>
 
 <style>
-/* Sample `apply` at-rules with Tailwind CSS
+/* Sample `apply` at-rules with Tailwind CSS */
 .container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
+  @apply min-h-screen flex justify-center items-center text-center mx-auto;
 }
-*/
 
 #core-board.cursor_red {
   cursor: url('~assets/red.png'), auto;

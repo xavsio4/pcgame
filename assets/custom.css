@@ -10,38 +10,38 @@ html {
 
 .black {
   background-color: #111827 !important;
-  color: #111827;
+  color: white;
 }
 
 .white {
   background-color: #fffbeb !important;
-  color: #fffbeb;
+  color: black;
 }
 
 .purple {
   background-color: #7c3aed !important;
-  color: #7c3aed;
+  color: white;
 }
 
 .green {
   background-color: #059669 !important;
-  color: #059669;
+  color: white;
 }
 .red {
   background-color: #dc2626 !important;
-  color: #dc2626;
+  color: white;
 }
 .yellow {
   background-color: #fcd34d !important;
-  color: #fcd34d;
+  color: black;
 }
 
 .orange {
   background-color: #f59e0b !important;
-  color: #f59e0b;
+  color: black;
 }
 
 .blue {
   background-color: #1d4ed8 !important;
-  color: #1d4ed8;
+  color: white;
 }
