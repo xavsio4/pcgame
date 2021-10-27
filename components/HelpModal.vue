@@ -34,9 +34,10 @@
         an orange tile because orange is a mix of red and yellow.
       </p>
       <p>
-        Red can also be adjacent to purple has purple is made of blue and red.
+        Red can also be adjacent to purple as purple is made of blue and red.
       </p>
       <p>Here goes a table of combination:</p>
+      <br/>
       <table class="table">
         <tr><th>With</th><th>you can combine to</th></tr>
         <tr>
@@ -53,15 +54,15 @@
         </tr>
         <tr>
           <td><div class="purple h-5 w-5 rounded-md"></div>
-          <td class="flex flex-row"><div class="purple h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
+          <td class="flex flex-row"><div class="orange h-5 w-5 rounded-md"></div><div class="purple h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
         </tr>
         <tr>
           <td><div class="orange h-5 w-5 rounded-md"></div>
-          <td class="flex flex-row"><div class="yellow h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="orange h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
+          <td class="flex flex-row"><div class="green h-5 w-5 rounded-md"></div><div class="yellow h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="orange h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
         </tr>
         <tr>
           <td><div class="green h-5 w-5 rounded-md"></div>
-          <td class="flex flex-row"><div class="yellow h-5 w-5 rounded-md"></div><div class="green h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
+          <td class="flex flex-row"><div class="orange h-5 w-5 rounded-md"></div><div class="yellow h-5 w-5 rounded-md"></div><div class="green h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
         </tr>
       </table>
       <br />
@@ -115,6 +116,13 @@
         </tr>
         <tr>
           <td>
+            <div class="green h-5 w-5 rounded-md"></div>
+          </td>
+          <td>1 points</td>
+          <td>Secondary</td>
+        </tr>
+        <tr>
+          <td>
             <div class="black h-5 w-5 rounded-md"></div>
           </td>
           <td>0 points</td>
@@ -145,6 +153,7 @@
         tiles, any square of the same color will provide additional points. Here
         are the points by squares realized :
       </p>
+      <br/>
       <table class="table">
         <tr>
           <th>Square of</th>
@@ -178,7 +187,91 @@
       </p>
       <br/>
       <h2>Game controls</h2>
-      <p></p>
+              
+      <table class="table">
+        <tr>
+          <td><button
+                class="
+                  p-2
+                  flex
+                  bg-blue-500
+                  text-white
+                  cursor-pointer
+                  rounded-md
+                  mr-2
+                "
+              >
+                <InformationCircleIcon size="1.2x" class="flex" />
+              </button></td>
+        <td>opens the help window</td></tr>
+        <tr>
+          <td><button
+                title="Restart Game"
+                class="
+                  p-2
+                  bg-blue-500
+                  text-white
+                  rounded-md
+                "
+              >
+                <RefreshIcon size="1.2x" class="flex" />
+              </button></td>
+        <td>Restart the game</td>
+        </tr>
+        <tr>
+          <td><button
+                class="text-black rounded-md border-solid border-black  "
+                to="hof"
+                >HoF</button
+              ></td>
+        <td>Go to hall of fame page</td>
+        </tr>
+        <tr><td><button
+                class="
+                  p-2
+                  bg-blue-500
+                  text-white
+                  rounded-md
+                "
+                title="Toggle Sound"
+              >
+                <VolumeUpIcon
+                  size="1.2x"
+                  class="flex"
+                />
+                
+              </button></td><td>Toggle sound</td></tr>
+      </table>
     </div>
   </div>
 </template>
+<script>
+import {
+  TrashIcon,
+  PauseIcon,
+  SaveIcon,
+  LogoutIcon,
+  PlayIcon,
+  VolumeUpIcon,
+  VolumeOffIcon,
+  RefreshIcon,
+  InformationCircleIcon,
+  ChevronDownIcon,
+} from '@vue-hero-icons/outline'
+
+export default {
+  components:{
+    TrashIcon,
+    PauseIcon,
+    SaveIcon,
+    LogoutIcon,
+    PlayIcon,
+    VolumeUpIcon,
+    VolumeOffIcon,
+    RefreshIcon,
+    InformationCircleIcon,
+    ChevronDownIcon
+  }
+  
+}
+</script>

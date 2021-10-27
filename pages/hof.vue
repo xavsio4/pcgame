@@ -12,7 +12,9 @@
         md:w-1/2
       "
     >
-      <nuxt-link class="mx-auto mb-2" to="/">Back to game</nuxt-link>
+      <nuxt-link class="mx-auto mb-2 border-solid border-black" to="/"
+        >Back to game</nuxt-link
+      >
       <div class="text-6xl font-bold">Hall of fame</div>
       <div v-if="loading" class="mt-6 mx-auto font-bold">Loading...</div>
       <ul class="mt-6 mx-auto">

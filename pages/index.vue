@@ -14,7 +14,7 @@
                 bg-gray-200
                 text-center
                 p-2
-                rounded
+                rounded-md
                 font-semibold
               "
             >
@@ -54,7 +54,15 @@
               >
                 <InformationCircleIcon size="1.2x" class="flex" />
               </button>
-              <nuxt-link class="text-black flex cursor-pointer" to="hof"
+              <nuxt-link
+                class="
+                  text-black
+                  rounded-md
+                  border-solid border-black
+                  flex
+                  cursor-pointer
+                "
+                to="hof"
                 >HoF</nuxt-link
               >
               <button
