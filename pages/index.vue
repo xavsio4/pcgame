@@ -245,7 +245,13 @@
         :moves="players[0].moves"
       ></end-modal
     ></modal>
-    <modal name="helpmodal" class="m-3" :adaptive="true">
+    <modal
+      name="helpmodal"
+      class="m-3"
+      :adaptive="true"
+      :height="300"
+      :scrollable="true"
+    >
       <help-modal></help-modal>
     </modal>
   </div>
