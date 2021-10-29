@@ -28,6 +28,7 @@
             class="p-2 rounded-xl bg-gray-100 border"
             placeholder="Player"
             type="text"
+            maxlength="12"
             v-model="player"
           />
 

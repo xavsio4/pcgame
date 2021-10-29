@@ -20,7 +20,7 @@
       <ul class="mt-6 mx-auto">
         <li v-for="item in scores" :key="item.id">
           <div class="text-xl font-bold text-gray-500">
-            {{ item.data.player }} ............. {{ item.data.score }} pts
+            {{ item.data.player }} .......... {{ item.data.score }} pts
           </div>
         </li>
       </ul>
