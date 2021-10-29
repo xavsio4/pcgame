@@ -38,7 +38,12 @@
           </div>
           <div class="w-6/12 md:w-3/12">
             <div class="flex flex-row">
-              <button v-if="status === 'end'">Share</button>
+              <button
+                class="mx-auto mb-2 flex border-solid border-black"
+                v-if="status === 'end'"
+              >
+                Share
+              </button>
               <button
                 v-if="status === 'end'"
                 @click="getImage"
@@ -212,7 +217,8 @@
           >
             <div class="content-center hidden md:block">
               <span class="font-bold">Moves:</span>
-              {{ players[0].moves }} <span class="font-bold">Scores:</span>
+              {{ players[0].moves }}
+              <span class="font-bold">Scores:</span>
               {{ players[0].score }}
               <span class="font-bold">Tiles:</span>
               {{ 64 - tileCount }}
@@ -264,9 +270,9 @@
         "
       >
         <span class="font-bold">Moves:</span>
-        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">
-          {{ players[0].moves }}
-        </span>
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+          players[0].moves
+        }}</span>
         <span class="font-bold">Points:</span>
         <span class="rounded-xl font-bold text-white bg-pink-300 p-1">
           {{ players[0].score }}</span
