@@ -131,7 +131,9 @@ export default {
           .then((docid) => {
             docRef = docid.id
             this.displayForm = false
-            this.$toast.success('Recorded in the Hall of fame')
+            this.$toast.success(
+              '<span class="font-extrabold mx-auto text-center text-xl">Recorded in the Hall of fame</span>'
+            )
             this.$emit('close')
           })
       } catch (e) {

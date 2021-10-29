@@ -38,6 +38,25 @@
           </div>
           <div class="w-6/12 md:w-3/12">
             <div class="flex flex-row">
+              <button v-if="status === 'end'">Share</button>
+              <button
+                v-if="status === 'end'"
+                @click="getImage"
+                title="Download a jpeg of your board"
+                class="
+                  p-2
+                  flex
+                  bg-gradient-to-r
+                  from-green-400
+                  to-blue-500
+                  text-white
+                  cursor-pointer
+                  rounded-md
+                  mr-2
+                "
+              >
+                <ArrowCircleDownIcon size="1.2x" class="flex" />
+              </button>
               <button
                 @click="$modal.show('helpmodal')"
                 title="Help"
@@ -300,11 +319,13 @@ import {
   RefreshIcon,
   InformationCircleIcon,
   ChevronDownIcon,
+  ArrowCircleDownIcon,
 } from '@vue-hero-icons/outline'
 import { Howl } from 'howler'
 
 export default {
   components: {
+    ArrowCircleDownIcon,
     TrashIcon,
     PauseIcon,
     SaveIcon,
@@ -408,10 +429,7 @@ export default {
     openmodal() {
       this.$modal.show('endgame')
     },
-    close() {
-      this.$toast.info('You can download your grid in jpeg format.')
-      // this.$modal.hide('endgame')
-    },
+
     init() {
       this.rollDices()
       this.bonusPop = 0
@@ -466,7 +484,7 @@ export default {
     click(e) {
       // increment moves
       if (this.tileCount < 64) {
-        this.movet(e)
+        //this.movet(e)
         this.players[this.current_player].moves++
         console.log(e.target)
         console.log(e.toElement)
@@ -498,9 +516,14 @@ export default {
         } else {
           // the first move section (no control)
           this.status = 'started'
-          if (this.soundStatus === 'on') this.sounds.bg.play()
+          if (this.soundStatus === 'on') {
+            this.sounds.bg.stop()
+            this.sounds.bg.play()
+          }
           this.gameMessage = 'Game Started'
-          this.$toast.info('Game has started')
+          this.$toast.info(
+            '<span class="font-extrabold mx-auto text-center text-xl">Game has started</span>'
+          )
           this.board[e.target.dataset.pos.split('')[0]][
             e.target.dataset.pos.split('')[1]
           ] = this.mcolor
@@ -514,7 +537,9 @@ export default {
       } else if (this.whiteCount === 0) {
         this.sounds.tapWrong.play()
         this.gameMessage = 'Game has ended'
-        this.$toast.success('Game has ended')
+        this.$toast.success(
+          '<span class="font-extrabold mx-auto text-center text-xl">Game has ended</span>'
+        )
         this.status = 'end'
         console.log(this.board)
       }
@@ -537,40 +562,24 @@ export default {
               this.players[0].score + bonusengine.bonus(this.board)
             this.mcolor = 'blank'
             this.gameMessage = 'Game has ended'
-            this.$toast.info('Game has ended')
+            this.$toast.info(
+              '<span class="font-extrabold mx-auto text-center text-xl">Game has ended</span>'
+            )
             this.status = 'end'
             this.$modal.show('endgame')
           }
         }
       }
       if (this.status === 'bonus' && this.bonusPop === 0) {
-        this.$toast.info('Entered Bonus phase')
+        this.$toast.global.bonus()
         this.bonusPop = 1
       }
     },
-    /* drop(e) {
-      if (
-        this.board[e.toElement.dataset.pos.split('')[0]][
-          e.toElement.dataset.pos.split('')[1]
-        ] === '' &&
-        rulesengine.rules(this.mcolor, e.toElement.dataset.pos, this.board)
-      ) {
-        this.board[e.toElement.dataset.pos.split('')[0]][
-          e.toElement.dataset.pos.split('')[1]
-        ] = this.mcolor
-        this.sounds.tapCorrect.play()
-      } else this.sounds.tapWrong.play()
-    }, */
+
     dragleave(e) {
       e.toElement.className = this.savedClass
     },
-    /*allowDrop(e) {
-      // console.log(e)
-      this.savedClass = e.toElement.className
-      if (e.toElement.className === 'box')
-        e.toElement.className = 'box ' + 'pulsar'
-      else e.preventDefault
-    },*/
+
     restartGame() {
       this.init()
     },
@@ -580,7 +589,7 @@ export default {
         this.sounds.bg.stop()
       } else {
         this.soundStatus = 'on'
-        this.sounds.bg.play()
+        if (this.status !== 'start') this.sounds.bg.play()
       }
     },
   }, // methods

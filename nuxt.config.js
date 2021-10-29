@@ -7,11 +7,15 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'pcgame',
+    title: 'Primares',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Beat the colors out of the board',
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
@@ -60,16 +64,22 @@ export default {
   //  Toast settings
   toast: {
     position: 'bottom-center',
-    duration: 1700,
-    /*  register: [ // Register custom toasts
-       {
-         name: 'my-error',
-         message: 'Oops...Something went wrong',
-         options: {
-           type: 'error'
-         }
-       }
-    ] */
+    duration: 1860,
+    register: [
+      // Register custom toasts
+      {
+        name: 'bonus',
+        message:
+          '<span class="text-2xl font-extrabold mx-auto">Bonus Phase: Use your white tiles to make squares.</span>',
+        options: {
+          type: 'info',
+          position: 'top-center',
+          fitToScreen: true,
+          fullWidth: true,
+          duration: 2000,
+        },
+      },
+    ],
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

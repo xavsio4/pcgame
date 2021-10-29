@@ -3,7 +3,7 @@
     <div class="p-10 rounded-xl bg-white overflow-y-scroll h-60">
       <div class="font-bold text-3xl">Help</div>
       <p>
-        Primares is a board game about primary and secondary colors. This is an
+        Primares&#174; is a board game about primary and secondary colors. This is an
         online variant for solo players. The board game can be played up to four
         people and has more strategies involved.
       </p>
@@ -237,6 +237,13 @@
                 
               </button></td><td>Toggle sound</td></tr>
       </table>
+      <br/>
+      <h2>Credits</h2>
+      <ul><li>Game created by ....... W. Vandervelde</li>
+      <li><span class="italic">Primares&#174; and its gameplay are registered.</span> </li></ul>
+      
+      <br/>
+      
     </div>
   </div>
 </template>
