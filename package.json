@@ -20,7 +20,7 @@
     "firebase": "^8.10.0",
     "gsap": "^3.5.1",
     "howler": "^2.2.0",
-    "nuxt": "^2.15.3",
+    "nuxt": "^2.15.8",
     "nuxt-socket-io": "^1.1.18",
     "vue-js-modal": "^2.0.1"
   },
