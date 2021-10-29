@@ -7,9 +7,8 @@
       <div class="mx-auto w-4/5 p-4 inline-block">
         <div class="flex flex-row justify-between">
           <div class="w-4/12 md:w-3/12 float-left">
-            <div
+            <!-- <div
               class="
-                float-left
                 text-gray-700
                 bg-gray-200
                 text-center
@@ -19,7 +18,7 @@
               "
             >
               00:00:00
-            </div>
+            </div>-->
           </div>
           <div
             class="
@@ -233,12 +232,30 @@
           </div>
         </span>
       </div>
-      <div class="mx-auto content-center text-lg md:hidden">
+      <div
+        class="
+          mx-auto
+          rounded-xl
+          bg-gray-100
+          p-2
+          content-center
+          mt-4
+          text-lg
+          md:hidden
+        "
+      >
         <span class="font-bold">Moves:</span>
-        {{ players[0].moves }} <span class="font-bold">Scores:</span>
-        {{ players[0].score }}
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">
+          {{ players[0].moves }}
+        </span>
+        <span class="font-bold">Points:</span>
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">
+          {{ players[0].score }}</span
+        >
         <span class="font-bold">Tiles:</span>
-        {{ 64 - tileCount }}
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+          64 - tileCount
+        }}</span>
       </div>
       <div class="text-center font-bold p-2 md:hidden">
         {{ gameMessage }}
@@ -351,16 +368,26 @@ export default {
       soundStatus: 'on', // Sound status: 'on' or 'off'
       sounds: {
         // Vars needed for sounds effects
-        tapCorrect: null,
-        tapWrong: null,
+        tapCorrect: new Howl({
+          src: ['audio/game-tap.mp3'],
+          volume: 0.05,
+        }),
+        tapWrong: new Howl({
+          src: ['audio/game-wrong-tap.mp3'],
+          volume: 0.15,
+        }),
         tapBlack: null,
         getWhite: null,
         endGame: null,
         bonusPhase: null,
         scoreCalc: null,
-        win: null,
-        lose: null,
-        bg: null,
+        win: new Howl({ src: ['audio/game-win.mp3'], volume: 0.4 }),
+        lose: new Howl({ src: ['audio/game-lose.mp3'], volume: 0.4 }),
+        bg: new Howl({
+          src: ['audio/game-background.mp3'],
+          loop: true,
+          volume: 0.2,
+        }),
       },
       points: {
         red: 2,
@@ -389,24 +416,6 @@ export default {
       this.rollDices()
       this.bonusPop = 0
       this.enabledBlack = true
-      // Instanciate sounds effects
-      this.sounds.tapCorrect = new Howl({
-        src: ['audio/game-tap.mp3'],
-        volume: 0.05,
-      })
-      this.sounds.tapWrong = new Howl({
-        src: ['audio/game-wrong-tap.mp3'],
-        volume: 0.15,
-      })
-      this.sounds.win = new Howl({ src: ['audio/game-win.mp3'], volume: 0.4 })
-      this.sounds.lose = new Howl({ src: ['audio/game-lose.mp3'], volume: 0.4 })
-      this.sounds.bg = new Howl({
-        src: ['audio/game-background.mp3'],
-        loop: true,
-        volume: 0.2,
-      })
-      this.sounds.bg.stop()
-      //this.sounds.bg.play()
 
       // re iniiate tile count
       this.tileCount = 0
@@ -428,6 +437,7 @@ export default {
       this.players[0].moves = 0
       this.whiteCount = 0
       this.status = 'start'
+      this.sounds.bg.stop()
     }, // init
     getImage() {
       domtoimage
@@ -488,6 +498,7 @@ export default {
         } else {
           // the first move section (no control)
           this.status = 'started'
+          if (this.soundStatus === 'on') this.sounds.bg.play()
           this.gameMessage = 'Game Started'
           this.$toast.info('Game has started')
           this.board[e.target.dataset.pos.split('')[0]][

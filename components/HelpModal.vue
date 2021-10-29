@@ -36,11 +36,14 @@
       <p>
         Red can also be adjacent to purple as purple is made of blue and red.
       </p>
+      <p>To summarize, all secondary colors: orange, green and purple can always touch each other, 
+        since they always contain a common color.  The three primary colors: red, yellow and blue can never touch each other. 
+        Red can never touch green, yellow can never touch purple, blue can never touch orange.</p>
       <p>Here goes a table of combination:</p>
       <br/>
-      <table class="table">
-        <tr><th>With</th><th>you can combine to</th></tr>
-        <tr>
+      <table class="table-auto border-solid">
+        <thead><tr><th>With</th><th>you can combine to</th></tr></thead>
+        <tbody><tr>
           <td><div class="red h-5 w-5 rounded-md"></div>
           <td class="flex flex-row"><div class="red h-5 w-5 rounded-md"></div><div class="orange h-5 w-5 rounded-md"></div><div class="purple h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
         </tr>
@@ -54,16 +57,16 @@
         </tr>
         <tr>
           <td><div class="purple h-5 w-5 rounded-md"></div>
-          <td class="flex flex-row"><div class="orange h-5 w-5 rounded-md"></div><div class="purple h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
+          <td class="flex flex-row"><div class="green h-5 w-5 rounded-md"></div><div class="orange h-5 w-5 rounded-md"></div><div class="purple h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
         </tr>
         <tr>
           <td><div class="orange h-5 w-5 rounded-md"></div>
-          <td class="flex flex-row"><div class="green h-5 w-5 rounded-md"></div><div class="yellow h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="orange h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
+          <td class="flex flex-row"><div class="purple h-5 w-5 rounded-md"></div><div class="green h-5 w-5 rounded-md"></div><div class="yellow h-5 w-5 rounded-md"></div><div class="red h-5 w-5 rounded-md"></div><div class="orange h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
         </tr>
         <tr>
           <td><div class="green h-5 w-5 rounded-md"></div>
-          <td class="flex flex-row"><div class="orange h-5 w-5 rounded-md"></div><div class="yellow h-5 w-5 rounded-md"></div><div class="green h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
-        </tr>
+          <td class="flex flex-row"><div class="purple h-5 w-5 rounded-md"></div><div class="orange h-5 w-5 rounded-md"></div><div class="yellow h-5 w-5 rounded-md"></div><div class="green h-5 w-5 rounded-md"></div><div class="blue h-5 w-5 rounded-md"></div><div class="black h-5 w-5 rounded-md"></div></td></td>
+        </tr></tbody>
       </table>
       <br />
       <h2>Points</h2>
@@ -72,18 +75,16 @@
         move gives you the point of the tile you placed. Here under is the list
         of points in the solo variant.
       </p>
-      <table class="table">
+      <table class="table border-collapse">
         <tr>
           <th>Color</th>
           <th>Points</th>
-          <th>P/S</th>
         </tr>
-        <tr>
-          <td>
+        <tr >
+          <td >
             <div class="red h-5 w-5 rounded-md"></div>
           </td>
-          <td>2 points</td>
-          <td>Primary</td>
+          <td >2 points</td>
         </tr>
         <tr>
           <td>
@@ -91,42 +92,36 @@
           </td>
           <td>2 points</td>
 
-          <td>Primary</td>
         </tr>
         <tr>
           <td>
             <div class="blue h-5 w-5 rounded-md"></div>
           </td>
           <td>2 points</td>
-          <td>Primary</td>
         </tr>
         <tr>
           <td>
             <div class="purple h-5 w-5 rounded-md"></div>
           </td>
           <td>1 points</td>
-          <td>Secondary</td>
         </tr>
         <tr>
           <td>
             <div class="orange h-5 w-5 rounded-md"></div>
           </td>
           <td>1 points</td>
-          <td>Secondary</td>
         </tr>
         <tr>
           <td>
             <div class="green h-5 w-5 rounded-md"></div>
           </td>
           <td>1 points</td>
-          <td>Secondary</td>
         </tr>
         <tr>
           <td>
             <div class="black h-5 w-5 rounded-md"></div>
           </td>
           <td>0 points</td>
-          <td></td>
         </tr>
       </table>
       <br />
@@ -275,3 +270,9 @@ export default {
   
 }
 </script>
+<style scoped>
+td {
+  @apply border p-2;
+}
+
+</style>
