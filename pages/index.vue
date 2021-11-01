@@ -293,6 +293,7 @@
         @download="getImage"
         :score="players[0].score"
         :moves="players[0].moves"
+        :squares="players[0].squareCounts"
       ></end-modal
     ></modal>
     <modal
@@ -376,6 +377,7 @@ export default {
           score: 0,
           whites: 0,
           playtime: 0,
+          squareCounts: null,
         },
       ],
       current_player: 0,
@@ -564,8 +566,9 @@ export default {
             this.players[0].score + this.points[this.mcolor]
           this.whiteCount--
           if (this.whiteCount === 0) {
-            this.players[0].score =
-              this.players[0].score + bonusengine.bonus(this.board)
+            const bonusResults = bonusengine.bonus(this.board)
+            this.players[0].score = this.players[0].score + bonusResults[0]
+            this.players[0].squareCounts = bonusResults[1]
             this.mcolor = 'blank'
             this.gameMessage = 'Game has ended'
             this.$toast.info(

@@ -7,16 +7,16 @@
         <div class="grid grid-cols-4 gap-2">
           <div><span class="font-bold">Moves :</span> {{ moves }}</div>
           <div>
-            <span class="font-bold">4t square :</span>
-            <span>{{ square4 }}</span>
+            <span class="font-bold">4 square :</span>
+            <span>{{ squares[4] }}</span>
           </div>
           <div>
-            <span class="font-bold">3t square :</span>
-            <span>{{ square3 }}</span>
+            <span class="font-bold">3 square :</span>
+            <span>{{ squares[3] }}</span>
           </div>
           <div>
-            <span class="font-bold">2t square :</span>
-            <span>{{ square2 }}</span>
+            <span class="font-bold">2 square :</span>
+            <span>{{ squares[2] }}</span>
           </div>
         </div>
       </div>
@@ -83,15 +83,8 @@ export default {
       type: Number,
       default: 90,
     },
-    square4: {
-      type: Number,
-      default: 0,
-    },
-    square3: {
-      type: Number,
-      default: 0,
-    },
-    square2: {
+
+    squares: {
       type: Number,
       default: 0,
     },

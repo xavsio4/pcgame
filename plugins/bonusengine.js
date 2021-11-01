@@ -5,8 +5,9 @@ export const bonusengine = {
   // Parameters: color, position and board to check
   remembered: [],
   results: [],
+  squareCounts: [0, 0, 0, 0, 0, 0],
   total: 0,
-  points: [0, 0, 15, 75, 180],
+  points: [0, 0, 15, 75, 180, 300],
   boardCpy: [],
 
   bonus: function (board) {
@@ -19,10 +20,11 @@ export const bonusengine = {
     })
     console.log(result)
     this.initBinary(result)
+    this.binaried(5)
     this.binaried(4)
     this.binaried(3)
     this.binaried(2)
-    return this.total
+    return [this.total, this.squareCounts]
   },
   arrayClone: function (arr) {
     var i, copy
@@ -60,12 +62,13 @@ export const bonusengine = {
       }
     })
     console.log(this.boardCpy)
-  }, //initbinary
+  }, // Initbinary
   binaried: function (len) {
     console.log('binary :value' + len)
     let total = 0
     this.results = []
     this.boardCpy.forEach((item) => {
+      //by line
       let iterator = 0
       var mi = Number(this.boardCpy.indexOf(item))
       for (let i in item) {
@@ -143,6 +146,7 @@ export const bonusengine = {
           console.log('grille de ' + len)
           // now remove grid
           // this.remgrid()
+          this.squareCounts[len] = this.squareCounts[len] + 1
           this.total = this.total + this.points[len]
           iterator = 0
         }

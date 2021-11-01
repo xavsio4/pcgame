@@ -22,6 +22,7 @@
     </span>
     {{ results }}
     {{ total }}
+    {{ squareCounts }}
   </div>
 </template>
 <script>
@@ -29,7 +30,8 @@ export default {
   data() {
     return {
       colors: ['red', 'blue', 'green', 'yellow', 'orange', 'purple'],
-      points: [0, 0, 15, 75, 180],
+      points: [0, 0, 15, 75, 180, 300],
+      squareCounts: [0, 0, 0, 0, 0, 0],
       colorscount: [
         { col: 'red', count: 0, pos_start: 0, pos_end: 0 },
         { col: 'blue', count: 0, pos_start: 0, pos_end: 0 },
@@ -210,7 +212,6 @@ export default {
     }
   },
   methods: {
-    
     // deep clone an array
     arrayClone(arr) {
       var i, copy
@@ -262,7 +263,7 @@ export default {
         console.log(mi)
         for (let i in item) {
           //var a = Number(i)
-          
+
           if (linsav[i] === undefined) linsav[i] = [lin]
           if (
             item[i].start_pos === linsav[i].start_pos &&
@@ -279,6 +280,7 @@ export default {
             console.log('grille de ' + len)
             // now remove grid
             // this.remgrid()
+            this.squareCounts[len] = this.squareCounts[len] + 1
             this.total = this.total + this.points[len]
             iterator = 0
           }
