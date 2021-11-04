@@ -115,9 +115,9 @@ export default {
             //   set to replace and add to add
             score: this.score,
             moves: this.moves,
-            square4: this.square4,
-            square3: this.square3,
-            square2: this.square2,
+            square4: this.squares[4],
+            square3: this.squares[3],
+            square2: this.squares[2],
             playtime: this.playtime,
             entry_date: Date.now(),
             player: this.player,
