@@ -50,159 +50,77 @@ export default {
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
       ],
-      boardo: {
-        1: {
-          1: 'green',
-          2: 'green',
-          3: 'purple',
-          4: 'red',
-          5: 'red',
-          6: 'black',
-          7: 'yellow',
-          8: 'yellow',
-        },
-        2: {
-          1: 'green',
-          2: 'purple',
-          3: 'purple',
-          4: 'purple',
-          5: 'purple',
-          6: 'orange',
-          7: 'yellow',
-          8: 'yellow',
-        },
-        3: {
-          1: 'green',
-          2: 'purple',
-          3: 'purple',
-          4: 'purple',
-          5: 'purple',
-          6: 'orange',
-          7: 'yellow',
-          8: 'yellow',
-        },
-        4: {
-          1: 'green',
-          2: 'purple',
-          3: 'purple',
-          4: 'purple',
-          5: 'purple',
-          6: 'orange',
-          7: 'yellow',
-          8: 'yellow',
-        },
-        5: {
-          1: 'green',
-          2: 'purple',
-          3: 'purple',
-          4: 'purple',
-          5: 'purple',
-          6: 'orange',
-          7: 'orange',
-          8: 'orange',
-        },
-        6: {
-          1: 'green',
-          2: 'green',
-          3: 'blue',
-          4: 'blue',
-          5: 'purple',
-          6: 'orange',
-          7: 'yellow',
-          8: 'yellow',
-        },
-        7: {
-          1: 'green',
-          2: 'green',
-          3: 'blue',
-          4: 'blue',
-          5: 'purple',
-          6: 'orange',
-          7: 'green',
-          8: 'green',
-        },
-        8: {
-          1: 'green',
-          2: 'green',
-          3: 'blue',
-          4: 'purple',
-          5: 'red',
-          6: 'purple',
-          7: 'green',
-          8: 'green',
-        },
-      },
       board: [
-        ['green', 'green', 'purple', 'red', 'red', 'black', 'yellow', 'yellow'],
         [
-          'green',
-          'purple',
-          'purple',
-          'purple',
-          'purple',
-          'orange',
-          'yellow',
-          'yellow',
-        ],
-        [
-          'green',
-          'purple',
-          'purple',
-          'purple',
-          'purple',
-          'orange',
-          'yellow',
-          'yellow',
-        ],
-        [
-          'green',
-          'purple',
-          'purple',
-          'purple',
-          'purple',
-          'orange',
-          'yellow',
-          'yellow',
-        ],
-        [
-          'green',
-          'purple',
-          'purple',
-          'purple',
-          'purple',
-          'orange',
-          'orange',
-          'orange',
-        ],
-        [
-          'green',
-          'green',
+          'blue',
+          'blue',
           'blue',
           'blue',
           'purple',
+          'purple',
+          'purple',
+          'purple',
+        ],
+        [
+          'blue',
+          'green',
+          'green',
+          'purple',
+          'purple',
+          'purple',
+          'orange',
+          'green',
+        ],
+        [
+          'purple',
+          'green',
+          'green',
+          'purple',
+          'orange',
+          'green',
+          'yellow',
+          'yellow',
+        ],
+        [
+          'blue',
+          'green',
+          'green',
+          'green',
+          'orange',
+          'orange',
+          'yellow',
+          'yellow',
+        ],
+        [
+          'blue',
+          'green',
+          'green',
+          'green',
+          'orange',
           'orange',
           'yellow',
           'yellow',
         ],
         [
           'green',
-          'green',
-          'blue',
-          'blue',
-          'purple',
           'orange',
-          'green',
-          'green',
+          'yellow',
+          'black',
+          'red',
+          'red',
+          'orange',
+          'orange',
         ],
+        ['yellow', 'yellow', 'orange', 'orange', 'red', 'red', 'red', 'red'],
         [
-          'green',
-          'green',
-          'blue',
-          'purple',
-          'green',
-          'green',
-          'green',
-          'green',
+          'yellow',
+          'yellow',
+          'orange',
+          'orange',
+          'orange',
+          'orange',
+          'red',
+          'red',
         ],
       ],
       boardCpy: [],
@@ -230,6 +148,7 @@ export default {
     },
     // isolate the non adjacent tiles
     initBinary() {
+      //copy board and remove extremities
       this.boardCpy = this.arrayClone(this.board)
       this.board.forEach((item) => {
         var mi = Number(this.board.indexOf(item))
@@ -237,60 +156,21 @@ export default {
           var a = Number(i)
           // if first
           if (a === 0 && this.board[mi][a] !== this.board[mi][a + 1]) {
-            this.boardCpy[mi][a] = 0
+            this.boardCpy[mi][a] = 0 //first of the row
           }
           // for others
-          if (a > 0 && a < 7 && this.board[mi][a] !== this.board[mi][a + 1]) {
+          /*   if (a > 0 && a < 7 && this.board[mi][a] !== this.board[mi][a + 1]) {
             if (this.board[mi][a] !== this.board[mi][a - 1])
               this.boardCpy[mi][a] = 0
-          }
+          } */
           //for last of the row
           if (a === 7 && this.board[mi][a] !== this.board[mi][a - 1]) {
             this.boardCpy[mi][a] = 0
           }
         }
       })
+      console.log('init')
       console.log(this.boardCpy)
-    },
-    calcResult(len) {
-      let total = 0
-      let iterator = 0
-      const lin = { lin: null, col: 'null', start_pos: 0, end_pos: 0 }
-      //let linsav = Object.create(lin)
-      let linsav = [lin]
-      this.results.forEach((item) => {
-        var mi = Number(this.results.indexOf(item)) //from 0
-        console.log(mi)
-        for (let i in item) {
-          //var a = Number(i)
-
-          if (linsav[i] === undefined) linsav[i] = [lin]
-          if (
-            item[i].start_pos === linsav[i].start_pos &&
-            item[i].end_pos === linsav[i].end_pos &&
-            item[i].col === linsav[i].col &&
-            item[i].lin - linsav[i].lin === 1
-          ) {
-            iterator++
-            this.rembered.push(mi)
-            this.rembered.push(linsav[i].lin)
-          }
-
-          if (iterator === len - 1) {
-            console.log('grille de ' + len)
-            // now remove grid
-            // this.remgrid()
-            this.squareCounts[len] = this.squareCounts[len] + 1
-            this.total = this.total + this.points[len]
-            iterator = 0
-          }
-        } // col loop
-        linsav = [...item]
-        if (linsav === undefined) linsav = [lin]
-      })
-      //console.log(this.rembered)
-      this.remgrid()
-      return total
     },
     // removes already counted bonuses
     remgrid() {
@@ -345,11 +225,44 @@ export default {
       console.log(this.results)
       this.calcResult(len)
     },
+    calcResult(len) {
+      let total = 0
+      let iterator = 0
+      const lin = { lin: null, col: 'null', start_pos: 0, end_pos: 0 }
+      //let linsav = Object.create(lin)
+      let linsav = [lin]
+      this.results.forEach((item) => {
+        var mi = Number(this.results.indexOf(item)) //from 0
+        if (
+          item[0].start_pos === linsav[0].start_pos &&
+          item[0].end_pos === linsav[0].end_pos &&
+          item[0].col === linsav[0].col &&
+          item[0].lin - linsav[0].lin === 1
+        ) {
+          iterator++
+
+          this.rembered.push(mi)
+          this.rembered.push(linsav)
+        }
+
+        if (iterator === len - 1) {
+          console.log('grille de ' + len)
+          // now remove grid
+
+          this.squareCounts[len] = this.squareCounts[len] + 1
+          this.total = this.total + this.points[len]
+          iterator = 0
+          this.remgrid()
+        }
+        linsav = [...item]
+      })
+      return total
+    },
   },
   created() {
     this.initBinary()
-    this.binaried(4)
-    this.binaried(3)
+    //this.binaried(4)
+    //this.binaried(3)
     this.binaried(2)
   },
 }
@@ -365,7 +278,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 4rem;
-  height: 4rem;
+  width: 2rem;
+  height: 2rem;
 }
 </style>

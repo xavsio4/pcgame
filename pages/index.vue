@@ -39,10 +39,20 @@
           <div class="w-6/12 md:w-3/12">
             <div class="flex flex-row">
               <button
-                class="mx-auto mb-2 flex border-solid border-black"
+                class="
+                  p-2
+                  flex
+                  bg-gradient-to-r
+                  from-green-400
+                  to-blue-500
+                  text-white
+                  cursor-pointer
+                  rounded-md
+                  mr-2
+                "
                 v-if="status === 'end'"
               >
-                Share
+                <ShareIcon size="1.2x" class="flex" />
               </button>
               <button
                 v-if="status === 'end'"
@@ -215,7 +225,10 @@
             "
             :class="mcolor"
           >
-            <div class="content-center hidden md:block">
+            <div
+              class="content-center hidden md:block"
+              :class="status === 'end' ? 'text-black' : 'text-white'"
+            >
               <span class="font-bold">Moves:</span>
               {{ players[0].moves }}
               <span class="font-bold">Scores:</span>
@@ -317,6 +330,7 @@ import HelpModal from '~/components/HelpModal.vue'
 
 import {
   TrashIcon,
+  ShareIcon,
   PauseIcon,
   SaveIcon,
   LogoutIcon,
@@ -334,6 +348,7 @@ export default {
   components: {
     ArrowCircleDownIcon,
     TrashIcon,
+    ShareIcon,
     PauseIcon,
     SaveIcon,
     LogoutIcon,

@@ -75,6 +75,8 @@ export const rulesengine = {
     )
       return false
 
+    if (position === 'black') return false
+
     // console.log(position)
     // console.log(color)
     // console.log(leftPos)
