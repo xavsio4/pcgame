@@ -302,7 +302,6 @@
     </div>
     <modal name="endgame" :width="330" :height="440" :adaptive="true">
       <end-modal
-        @close="close"
         @download="getImage"
         :score="players[0].score"
         :moves="players[0].moves"
@@ -509,8 +508,8 @@ export default {
       if (this.tileCount < 64) {
         //this.movet(e)
         this.players[this.current_player].moves++
-        console.log(e.target)
-        console.log(e.toElement)
+        //console.log(e.target)
+        //console.log(e.toElement)
         if (!this.firstMove) {
           var tile =
             this.board[e.target.dataset.pos.split('')[0]][
@@ -581,6 +580,7 @@ export default {
             this.players[0].score + this.points[this.mcolor]
           this.whiteCount--
           if (this.whiteCount === 0) {
+            console.log(this.board)
             const bonusResults = bonusengine.bonus(this.board)
             this.players[0].score = this.players[0].score + bonusResults[0]
             this.players[0].squareCounts = bonusResults[1]

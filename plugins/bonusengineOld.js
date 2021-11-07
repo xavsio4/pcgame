@@ -1,7 +1,7 @@
 // will validate if the added tile
 // is within the rules
 
-/*export const bonusengine = {
+export const bonusengineOld = {
   // Parameters: color, position and board to check
   remembered: [],
   results: [],
@@ -124,38 +124,29 @@
     let linsav = [lin]
     this.results.forEach((item) => {
       var mi = Number(this.results.indexOf(item)) //from 0
-      console.log(mi)
-      for (let i in item) {
-        //var a = Number(i)
+      if (
+        item[0].start_pos === linsav[0].start_pos &&
+        item[0].end_pos === linsav[0].end_pos &&
+        item[0].col === linsav[0].col &&
+        item[0].lin - linsav[0].lin === 1
+      ) {
+        iterator++
 
-        if (linsav[i] === undefined) linsav[i] = [lin]
-        if (
-          item[i].start_pos === linsav[i].start_pos &&
-          item[i].end_pos === linsav[i].end_pos &&
-          item[i].col === linsav[i].col &&
-          item[i].lin - linsav[i].lin === 1
-        ) {
-          iterator++
-          console.log(this.results)
-          console.log(this.remembered)
-          this.remembered.push(mi)
-          this.remembered.push(linsav[i].lin)
-        }
+        this.remembered.push(mi)
+        this.remembered.push(linsav)
+      }
 
-        if (iterator === len - 1) {
-          console.log('grille de ' + len)
-          // now remove grid
-          // this.remgrid()
-          this.squareCounts[len] = this.squareCounts[len] + 1
-          this.total = this.total + this.points[len]
-          iterator = 0
-        }
-      } // col loop
+      if (iterator === len - 1) {
+        console.log('grille de ' + len)
+        // now remove grid
+
+        this.squareCounts[len] = this.squareCounts[len] + 1
+        this.total = this.total + this.points[len]
+        iterator = 0
+        this.remgrid()
+      }
       linsav = [...item]
-      if (linsav === undefined) linsav = [lin]
     })
-    //console.log(this.remembered)
-    this.remgrid()
     return total
   },
-}*/
+}

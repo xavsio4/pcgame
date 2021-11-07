@@ -8,7 +8,7 @@ export const bonusengine = {
   squareCounts: [0, 0, 0, 0, 0, 0],
   total: 0,
   points: [0, 0, 15, 75, 180, 300],
-  boardCpy: [],
+  boardcopy: [],
 
   bonus: function (board) {
     const result = []
@@ -19,134 +19,101 @@ export const bonusengine = {
       result.push(row)
     })
     console.log(result)
-    this.initBinary(result)
-    this.binaried(5)
+    this.arrayFlatten(result)
     this.binaried(4)
     this.binaried(3)
     this.binaried(2)
     return [this.total, this.squareCounts]
   },
-  arrayClone: function (arr) {
-    var i, copy
-
+  arrayFlatten: function (arr) {
     if (Array.isArray(arr)) {
-      copy = arr.slice(0)
-      for (i = 0; i < copy.length; i++) {
-        copy[i] = this.arrayClone(copy[i])
-      }
-      return copy
-    } else if (typeof arr === 'object') {
-      throw 'Cannot clone array containing an object!'
-    } else {
-      return arr
+      arr.forEach((item) => {
+        item.forEach((cell) => {
+          this.boardcopy.push(cell)
+        })
+      })
     }
-  }, //arrayclone
-  initBinary: function (board) {
-    this.boardCpy = this.arrayClone(board)
-    board.forEach((item) => {
-      var mi = Number(board.indexOf(item))
-      for (let i in item) {
-        var a = Number(i)
-        // if first
-        if (a === 0 && board[mi][a] !== board[mi][a + 1]) {
-          this.boardCpy[mi][a] = 0
-        }
-        // for others
-        if (a > 0 && a < 7 && board[mi][a] !== board[mi][a + 1]) {
-          if (board[mi][a] !== board[mi][a - 1]) this.boardCpy[mi][a] = 0
-        }
-        //for last of the row
-        if (a === 7 && board[mi][a] !== board[mi][a - 1]) {
-          this.boardCpy[mi][a] = 0
-        }
-      }
-    })
-    console.log(this.boardCpy)
-  }, // Initbinary
-  binaried: function (len) {
-    console.log('binary :value' + len)
-    let total = 0
-    this.results = []
-    this.boardCpy.forEach((item) => {
-      //by line
-      let iterator = 0
-      var mi = Number(this.boardCpy.indexOf(item))
-      for (let i in item) {
-        var a = Number(i)
-        if (a < 7 && item[a] !== 0) {
-          if (item[a] === item[a + 1]) {
-            // this.binaryBoard[mi][a] = item[a]
-            // this.binaryBoard[mi][a + 1] = item[a + 1]
-            iterator++
-            if (iterator === len - 1) {
-              if (this.results[mi] === undefined) this.results[mi] = []
-              this.results[mi].push({
-                lin: mi,
-                col: item[a],
-                start_pos: a - (len - 2),
-                end_pos: a + 1,
-              })
-              iterator = 0
-            }
-          } else {
-            iterator = 0
-          }
-        }
-      }
-    })
-    console.log(this.results)
-    this.calcResult(len)
-  }, //binaried
-  remgrid: function () {
-    let unique = this.remembered.filter((c, index) => {
-      return this.remembered.indexOf(c) === index
-    }) // will remove duplicates
-    this.results.forEach((item) => {
-      for (let i in item) {
-        for (
-          let a = Number(item[i].start_pos);
-          a < Number(item[i].end_pos) + 1;
-          a++
-        ) {
-          //remove only lines that counted in bonus
-          if (unique.includes(item[i].lin)) this.boardCpy[item[i].lin][a] = 0
-        }
-      }
-    })
-    console.log(this.boardCpy)
-    this.remembered = []
-  }, //remgrid
-  calcResult: function (len) {
-    let total = 0
-    let iterator = 0
-    const lin = { lin: null, col: 'null', start_pos: 0, end_pos: 0 }
-    //let linsav = Object.create(lin)
-    let linsav = [lin]
-    this.results.forEach((item) => {
-      var mi = Number(this.results.indexOf(item)) //from 0
-      if (
-        item[0].start_pos === linsav[0].start_pos &&
-        item[0].end_pos === linsav[0].end_pos &&
-        item[0].col === linsav[0].col &&
-        item[0].lin - linsav[0].lin === 1
-      ) {
-        iterator++
-
-        this.remembered.push(mi)
-        this.remembered.push(linsav)
-      }
-
-      if (iterator === len - 1) {
-        console.log('grille de ' + len)
-        // now remove grid
-
-        this.squareCounts[len] = this.squareCounts[len] + 1
-        this.total = this.total + this.points[len]
-        iterator = 0
-        this.remgrid()
-      }
-      linsav = [...item]
-    })
-    return total
+    console.log('flatten')
+    console.log(this.boardcopy)
   },
+  binaried: function (len) {
+    //marche pour 2
+    console.log(this.boardcopy)
+
+    let prevcol = ''
+    let i = 0
+    let iterator = 0
+    let equality = 0
+    let vector = []
+    let grids = 0
+    let noends = [7, 15, 23, 31, 39, 47, 53]
+
+    while (i < 64 - 4 * len + len) {
+      //pas nécessaire d'aller jusqu'au bout de la grille
+      if (this.boardcopy[i] === prevcol && this.boardcopy[i] !== '') {
+        if (i === 0 && this.boardcopy[i] !== '') vector.push(i - 1)
+        if (this.boardcopy[i] !== '') vector.push(i)
+        if (noends.includes(vector[0])) {
+          vector.splice(0, 1)
+        }
+        //if (this.boardcopy[vector[i]] === this.boardcopy[vector[i - 1]])
+        //check if same color
+        if (vector.length === len) iterator++
+        if (iterator === 1) {
+          console.log(vector)
+          for (let a = 0; a < len; a++) {
+            if (len === 2) {
+              if (this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 8]) {
+                equality++
+              }
+            } //len 2
+            if (len === 3) {
+              if (
+                this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 8] &&
+                this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 16]
+              ) {
+                equality++
+              }
+            }
+            if (len === 4) {
+              if (
+                this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 8] &&
+                this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 16] &&
+                this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 24]
+              ) {
+                equality++
+              }
+            }
+          }
+          if (equality === len) {
+            //then we found a grid of len
+            grids++
+            this.squareCounts[len] = this.squareCounts[len] + 1
+            this.total = this.total + this.points[len]
+            console.log(grids)
+            //now remove the counted grid
+            for (let b = 0; b < vector.length; b++) {
+              this.boardcopy[vector[b]] = ''
+              this.boardcopy[vector[b] + 8] = ''
+              if (len === 3) this.boardcopy[vector[b] + 16] = ''
+              if (len === 4) this.boardcopy[vector[b] + 24] = ''
+            }
+          }
+          equality = 0
+          iterator = 0
+        } //found a tuple
+      } else {
+        vector = []
+        vector.push(i)
+        if (vector.length === len) {
+          iterator = 0
+          vector = []
+          equality = 0
+        }
+      }
+      // vector = []
+      prevcol = this.boardcopy[i]
+      i++
+    }
+  }, //bocalc3
 }
