@@ -51,50 +51,59 @@ export default {
         [0, 0, 0, 0, 0, 0, 0, 0],
       ],
       board: [
-        ['green', 'green', 'purple', 'purple', 'blue', 'blue', 'blue', 'blue'],
-        ['green', 'green', 'purple', 'purple', 'blue', 'blue', 'blue', 'blue'],
+        ['blue', 'blue', 'blue', 'blue', 'purple', 'red', 'purple', 'red'],
         [
-          'orange',
-          'orange',
-          'orange',
-          'orange',
+          'blue',
+          'blue',
+          'blue',
+          'blue',
+          'purple',
+          'purple',
+          'purple',
+          'purple',
+        ],
+        ['blue', 'blue', 'blue', 'blue', 'purple', 'red', 'purple', 'purple'],
+        ['blue', 'blue', 'blue', 'blue', 'green', 'orange', 'orange', 'orange'],
+        [
+          'purple',
           'green',
           'green',
-          'green',
-          'green',
+          'black',
+          'yellow',
+          'yellow',
+          'yellow',
+          'yellow',
         ],
         [
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'green',
-          'green',
-          'green',
-          'green',
-        ],
-        [
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'green',
-          'green',
-          'green',
-          'green',
-        ],
-        [
-          'orange',
-          'orange',
+          'red',
           'orange',
           'orange',
           'yellow',
           'yellow',
           'yellow',
-          'green',
+          'yellow',
+          'yellow',
         ],
-        ['red', 'red', 'red', 'orange', 'yellow', 'yellow', 'yellow', 'green'],
-        ['red', 'red', 'red', 'orange', 'yellow', 'yellow', 'yellow', 'orange'],
+        [
+          'red',
+          'orange',
+          'red',
+          'orange',
+          'yellow',
+          'yellow',
+          'yellow',
+          'yellow',
+        ],
+        [
+          'orange',
+          'red',
+          'red',
+          'orange',
+          'yellow',
+          'yellow',
+          'yellow',
+          'yellow',
+        ],
       ],
       boardcopy: [],
       results: [],
@@ -166,7 +175,7 @@ export default {
                   equality++
                 }
               }
-            }
+            } //for
             if (equality === len) {
               //then we found a grid of len
               grids++
@@ -183,6 +192,7 @@ export default {
             }
             equality = 0
             iterator = 0
+            vector = []
           } //found a tuple
         } else {
           vector = []

@@ -99,6 +99,7 @@ export const bonusengine = {
               if (len === 4) this.boardcopy[vector[b] + 24] = ''
             }
           }
+          vector = []
           equality = 0
           iterator = 0
         } //found a tuple
