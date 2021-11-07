@@ -295,6 +295,32 @@
           64 - tileCount
         }}</span>
       </div>
+      <!-- game squares -->
+      <div
+        class="
+          mx-auto
+          rounded-xl
+          bg-gray-100
+          p-2
+          content-center
+          mt-4
+          text-lg
+          md:hidden
+        "
+      >
+        <span class="font-bold">4 </span>
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+          players[0].squareCounts[4]
+        }}</span>
+        <span class="font-bold">3 </span>
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">
+          {{ players[0].squareCounts[3] }}</span
+        >
+        <span class="font-bold">2 </span>
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+          players[0].squareCounts[2]
+        }}</span>
+      </div>
       <div class="text-center font-bold p-2 md:hidden">
         {{ gameMessage }}
       </div>
@@ -391,7 +417,7 @@ export default {
           score: 0,
           whites: 0,
           playtime: 0,
-          squareCounts: null,
+          squareCounts: [0, 0, 0, 0, 0, 0],
         },
       ],
       current_player: 0,
