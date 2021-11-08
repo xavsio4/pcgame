@@ -320,6 +320,10 @@
         <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
           players[0].squareCounts[2]
         }}</span>
+        <span class="font-bold">Bonus: </span>
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+          players[0].bonus
+        }}</span>
       </div>
       <div class="text-center font-bold p-2 md:hidden">
         {{ gameMessage }}
@@ -415,6 +419,8 @@ export default {
           is_turn: true,
           moves: 0,
           score: 0,
+          bonus: 0,
+          playscore: 0,
           whites: 0,
           playtime: 0,
           squareCounts: [0, 0, 0, 0, 0, 0],
@@ -501,6 +507,9 @@ export default {
       // init players score
       this.players[0].score = 0
       this.players[0].moves = 0
+      this.players[0].playscore = 0
+      this.players[0].bonus = 0
+      this.players[0].squareCounts = [0, 0, 0, 0, 0, 0]
       this.whiteCount = 0
       this.status = 'start'
       this.sounds.bg.stop()
@@ -608,6 +617,8 @@ export default {
           if (this.whiteCount === 0) {
             console.log(this.board)
             const bonusResults = bonusengine.bonus(this.board)
+            this.players[0].playscore = this.players[0].score
+            this.players[0].bonus = bonusResults[0]
             this.players[0].score = this.players[0].score + bonusResults[0]
             this.players[0].squareCounts = bonusResults[1]
             this.mcolor = 'blank'

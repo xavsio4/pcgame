@@ -38,6 +38,7 @@ export const bonusengine = {
   },
   binaried: function (len) {
     //marche pour 2
+    console.log('for ' + len)
     console.log(this.boardcopy)
 
     let prevcol = ''
@@ -47,15 +48,25 @@ export const bonusengine = {
     let vector = []
     let grids = 0
     let noends = [7, 15, 23, 31, 39, 47, 53]
+    let savecopy = 'zap'
 
-    while (i < 64 - 4 * len + len) {
+    while (i < 64 - 4 * len) {
       //pas nécessaire d'aller jusqu'au bout de la grille
-      if (this.boardcopy[i] === prevcol && this.boardcopy[i] !== '') {
-        if (i === 0 && this.boardcopy[i] !== '') vector.push(i - 1)
-        if (this.boardcopy[i] !== '') vector.push(i)
-        if (noends.includes(vector[0])) {
+      savecopy = this.boardcopy[i]
+      if (
+        this.boardcopy[i] === prevcol &&
+        this.boardcopy[i] !== '' &&
+        prevcol !== '' &&
+        !noends.includes(i - 1)
+      ) {
+        if (vector.length === 0 && this.boardcopy[i - 1] !== '')
+          vector.push(i - 1)
+        vector.push(i)
+        if (noends.includes(vector[0]) && vector.length === len) {
           vector.splice(0, 1)
         }
+        //on élimine le premier de la file pour rouler
+        if (vector.length > len) vector.shift()
         //if (this.boardcopy[vector[i]] === this.boardcopy[vector[i - 1]])
         //check if same color
         if (vector.length === len) iterator++
@@ -84,7 +95,7 @@ export const bonusengine = {
                 equality++
               }
             }
-          }
+          } //for
           if (equality === len) {
             //then we found a grid of len
             grids++
@@ -98,22 +109,25 @@ export const bonusengine = {
               if (len === 3) this.boardcopy[vector[b] + 16] = ''
               if (len === 4) this.boardcopy[vector[b] + 24] = ''
             }
+            vector = []
           }
-          vector = []
+          if (equality > 0) vector.shift()
+          else vector = []
+
           equality = 0
           iterator = 0
         } //found a tuple
       } else {
         vector = []
-        vector.push(i)
         if (vector.length === len) {
           iterator = 0
-          vector = []
           equality = 0
         }
       }
+      console.log('iter')
+      console.log(vector)
       // vector = []
-      prevcol = this.boardcopy[i]
+      prevcol = savecopy
       i++
     }
   }, //bocalc3

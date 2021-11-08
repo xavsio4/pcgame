@@ -8,18 +8,12 @@
           :data-pos="idx + index"
           class="box"
           :class="[c]"
-        ></div>
-      </span>
-    </span>
-
-    <span id="bin-board">
-      <h2>Bin board</h2>
-      <span v-for="(r, idx) in binaryBoard" :key="idx" class="flex flex-row">
-        <div v-for="(c, index) in r" :key="index" :data-pos="idx + index">
-          {{ c }}
+        >
+          {{ idx * 8 + index }}
         </div>
       </span>
     </span>
+
     {{ results }}
     {{ total }}
     {{ squareCounts }}
@@ -51,58 +45,49 @@ export default {
         [0, 0, 0, 0, 0, 0, 0, 0],
       ],
       board: [
-        ['yellow', 'green', 'blue', 'blue', 'blue', 'blue', 'green', 'green'],
-        ['yellow', 'green', 'purple', 'blue', 'blue', 'blue', 'green', 'green'],
-        ['yellow', 'green', 'purple', 'blue', 'blue', 'blue', 'blue', 'green'],
+        ['red', 'red', 'red', 'red', 'red', 'orange', 'orange', 'yellow'],
+        ['red', 'red', 'red', 'red', 'orange', 'yellow', 'yellow', 'yellow'],
         [
+          'orange',
+          'orange',
+          'orange',
+          'orange',
+          'orange',
           'yellow',
-          'green',
-          'green',
-          'green',
-          'green',
-          'green',
-          'green',
-          'green',
+          'yellow',
+          'yellow',
         ],
         [
-          'yellow',
-          'yellow',
-          'yellow',
-          'black',
-          'orange',
-          'orange',
-          'orange',
           'purple',
+          'purple',
+          'orange',
+          'orange',
+          'orange',
+          'yellow',
+          'yellow',
+          'yellow',
         ],
         [
-          'yellow',
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'red',
-          'red',
+          'blue',
+          'blue',
+          'purple',
+          'purple',
+          'green',
+          'green',
+          'green',
+          'green',
         ],
+        ['blue', 'blue', 'blue', 'blue', 'green', 'green', 'green', 'green'],
+        ['blue', 'blue', 'blue', 'purple', 'green', 'green', 'green', 'green'],
         [
-          'yellow',
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'red',
-          'red',
-        ],
-        [
-          'yellow',
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'orange',
-          'red',
-          'red',
+          'blue',
+          'blue',
+          'purple',
+          'purple',
+          'green',
+          'green',
+          'green',
+          'green',
         ],
       ],
       boardcopy: [],
@@ -126,6 +111,7 @@ export default {
     },
     bocalc3(len) {
       //marche pour 2
+      console.log('for ' + len)
       console.log(this.boardcopy)
 
       let prevcol = ''
@@ -135,22 +121,25 @@ export default {
       let vector = []
       let grids = 0
       let noends = [7, 15, 23, 31, 39, 47, 53]
-      let savecopy = 0
+      let savecopy = 'zap'
 
-      while (i < 64 - 4 * len + len) {
+      while (i < 64 - 4 * len) {
         //pas nécessaire d'aller jusqu'au bout de la grille
         savecopy = this.boardcopy[i]
         if (
           this.boardcopy[i] === prevcol &&
           this.boardcopy[i] !== '' &&
-          prevcol !== ''
+          prevcol !== '' &&
+          !noends.includes(i - 1)
         ) {
-          if ((i === 0 || noends.includes(i)) && vector.includes(i))
+          if (vector.length === 0 && this.boardcopy[i - 1] !== '')
             vector.push(i - 1)
-          if (!vector.includes(i)) vector.push(i)
+          vector.push(i)
           if (noends.includes(vector[0]) && vector.length === len) {
             vector.splice(0, 1)
           }
+          //on élimine le premier de la file pour rouler
+          if (vector.length > len) vector.shift()
           //if (this.boardcopy[vector[i]] === this.boardcopy[vector[i - 1]])
           //check if same color
           if (vector.length === len) iterator++
@@ -189,7 +178,6 @@ export default {
               this.squareCounts[len] = this.squareCounts[len] + 1
               this.total = this.total + this.points[len]
               console.log(grids)
-
               //now remove the counted grid
               for (let b = 0; b < vector.length; b++) {
                 this.boardcopy[vector[b]] = ''
@@ -197,10 +185,13 @@ export default {
                 if (len === 3) this.boardcopy[vector[b] + 16] = ''
                 if (len === 4) this.boardcopy[vector[b] + 24] = ''
               }
+              vector = []
             }
+            if (equality > 0) vector.shift()
+            else vector = []
+
             equality = 0
             iterator = 0
-            if (vector.length === len) vector = []
           } //found a tuple
         } else {
           vector = []
@@ -208,7 +199,6 @@ export default {
             iterator = 0
             equality = 0
           }
-          vector.push(i)
         }
         console.log('iter')
         console.log(vector)
@@ -217,71 +207,17 @@ export default {
         i++
       }
     }, //bocalc3
-    bocalc(len) {
-      //marche pour 2
-      console.log(this.boardcopy)
-
-      let prevcol = ''
-      let i = 0
-      let iterator = 0
-      let equality = 0
-      let vector = []
-      let grids = 0
-      let noends = [7, 15, 23, 31, 39, 47, 53]
-
-      while (i < 64 - 4 * len + len) {
-        //pas nécessaire d'aller jusqu'au bout de la grille
-        if (this.boardcopy[i] === prevcol) {
-          vector.push(i - 1)
-          vector.push(i)
-          //if (this.boardcopy[vector[i]] === this.boardcopy[vector[i - 1]])
-          //check if same color
-          if (!noends.includes(i - 1) && vector.length === len) iterator++
-          if (iterator === 1) {
-            console.log(vector)
-            for (let a = 0; a < len; a++) {
-              if (this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 8]) {
-                equality++
-              }
-            }
-            if (equality === len) {
-              //then we found a grid of len
-              grids++
-              console.log(grids)
-              //now remove the counted grid
-              for (let b = 0; b < vector.length; b++) {
-                this.boardcopy[vector[b]] = ''
-                this.boardcopy[vector[b] + 8] = ''
-              }
-            }
-            equality = 0
-            iterator = 0
-          } //found a tuple
-        } else {
-          if (vector.length === len) {
-            iterator = 0
-            vector = []
-            equality = 0
-          }
-        }
-        vector = []
-        prevcol = this.boardcopy[i]
-        i++
-      }
-    }, //bocalc
-    // isolate the non adjacent tiles
-    // removes already counted bonuses
   },
   created() {
     this.arrayFlatten(this.board)
     this.bocalc3(4)
-    console.log('grille de 4')
+    //console.log('grille de 4')
     console.log(this.boardcopy)
     this.bocalc3(3)
     console.log('grille de 3')
     console.log(this.boardcopy)
     this.bocalc3(2)
-    console.log('grille de 2')
+    // console.log('grille de 2')
     console.log(this.boardcopy)
   },
 }
@@ -293,7 +229,7 @@ export default {
   border-radius: 6px;
   font-family: Helvetica;
   font-weight: bold;
-  font-size: 4em;
+  font-size: 1em;
   display: flex;
   justify-content: center;
   align-items: center;
