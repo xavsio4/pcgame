@@ -124,7 +124,7 @@ export const bonusengine = {
           equality = 0
         }
       }
-      console.log('iter')
+
       console.log(vector)
       // vector = []
       prevcol = savecopy
