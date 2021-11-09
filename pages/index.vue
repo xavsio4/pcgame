@@ -4,10 +4,10 @@
       <!-- left column -->
 
       <!-- Outside controls -->
-      <div class="mx-auto w-4/5 p-4 inline-block">
+      <div class="mx-auto w-full p-4 inline-block">
         <div class="flex flex-row justify-between">
-          <div class="w-4/12 md:w-3/12 float-left">
-            <!-- <div
+          <!--<div class="w-4/12 md:w-3/12 float-left">
+            <div
               class="
                 text-gray-700
                 bg-gray-200
@@ -18,8 +18,8 @@
               "
             >
               00:00:00
-            </div>-->
-          </div>
+            </div>
+          </div>-->
           <div
             class="
               w-2/12
@@ -270,6 +270,7 @@
           </div>
         </span>
       </div>
+      <!-- score board -->
       <div
         class="
           mx-auto
@@ -401,7 +402,7 @@ export default {
       results: [],
       squareCounts: [0, 0, 0, 0, 0, 0],
       total: 0,
-      pointsbonus: [0, 0, 15, 75, 180, 300],
+      pointsbonus: [0, 0, 15, 75, 180, 500],
       // bonus
       bonusPop: 0,
       isOpen: false, //white tile dropdown
