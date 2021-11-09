@@ -308,6 +308,10 @@
           md:hidden
         "
       >
+        <span class="font-bold">5 </span>
+        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+          players[0].squareCounts[5]
+        }}</span>
         <span class="font-bold">4 </span>
         <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
           players[0].squareCounts[4]
@@ -675,6 +679,7 @@ export default {
       })
       console.log(result)
       this.arrayFlatten(result)
+      this.bocalc(5)
       this.bocalc(4)
       this.bocalc(3)
       this.bocalc(2)
