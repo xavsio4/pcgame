@@ -34,6 +34,8 @@ export const rulesengine = {
       ],
     }
     const moveok = true
+    const pos = Number(position)
+    var actualpos = board[Math.trunc(pos / 10)][pos % 10]
 
     // possibilities[color]
 
@@ -71,7 +73,8 @@ export const rulesengine = {
       (belowColor === '' || typeof belowColor === 'undefined') &&
       (aboveColor === '' || typeof aboveColor === 'undefined') &&
       (rightColor === '' || typeof rightColor === 'undefined') &&
-      (leftColor === '' || typeof leftColor === 'undefined')
+      (leftColor === '' || typeof leftColor === 'undefined') &&
+      actualpos !== 'black'
     )
       return false
 

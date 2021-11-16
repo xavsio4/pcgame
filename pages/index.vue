@@ -291,10 +291,19 @@
         <span class="rounded-xl font-bold text-white bg-pink-300 p-1">
           {{ players[0].score }}</span
         >
-        <span class="font-bold">Tiles:</span>
-        <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
-          64 - tileCount
-        }}</span>
+        <span v-if="status !== 'end'">
+          <span class="font-bold">Tiles:</span>
+          <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+            64 - tileCount
+          }}</span>
+        </span>
+
+        <span v-if="status === 'end'">
+          <span class="font-bold">Score:</span>
+          <span class="rounded-xl font-bold text-white bg-pink-300 p-1">{{
+            players[0].playscore
+          }}</span>
+        </span>
       </div>
       <!-- game squares -->
       <div
@@ -504,6 +513,7 @@ export default {
       this.remembered = []
       this.results = []
       this.squareCounts = [0, 0, 0, 0, 0, 0]
+      this.total = 0
 
       // re iniiate tile count
       this.tileCount = 0
@@ -619,6 +629,7 @@ export default {
       if (this.tileCount === 64 && this.whiteCount !== 0) {
         this.enabledBlack = false
         this.gameMessage = 'Entered Bonus phase'
+        var bonusResults = 0
 
         this.status = 'bonus'
         console.log('bonus phase')
@@ -632,7 +643,7 @@ export default {
           this.whiteCount--
           if (this.whiteCount === 0) {
             console.log(this.board)
-            const bonusResults = this.bonus(this.board)
+            bonusResults = this.bonus(this.board)
             this.players[0].playscore = this.players[0].score
             this.players[0].bonus = bonusResults[0]
             console.log('Bonus' + bonusResults)
@@ -759,6 +770,18 @@ export default {
                   equality++
                 }
               }
+              if (len === 5) {
+                if (
+                  this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 8] &&
+                  this.boardcopy[vector[a]] ===
+                    this.boardcopy[vector[a] + 16] &&
+                  this.boardcopy[vector[a]] ===
+                    this.boardcopy[vector[a] + 24] &&
+                  this.boardcopy[vector[a]] === this.boardcopy[vector[a] + 32]
+                ) {
+                  equality++
+                }
+              }
             } //for
             if (equality === len) {
               //then we found a grid of len
@@ -772,6 +795,7 @@ export default {
                 this.boardcopy[vector[b] + 8] = ''
                 if (len === 3) this.boardcopy[vector[b] + 16] = ''
                 if (len === 4) this.boardcopy[vector[b] + 24] = ''
+                if (len === 5) this.boardcopy[vector[b] + 32] = ''
               }
               vector = []
             }
