@@ -20,23 +20,11 @@
               00:00:00
             </div>
           </div>-->
-          <div
-            class="
-              w-2/12
-              md:w-6/12
-              p-3
-              text-center
-              rounded-md
-              text-black
-              font-bold
-              leading-none
-            "
-          >
-            <div class="text-center hidden md:block">
+
+          <div class="mx-auto">
+            <div class="mr-2 font-bold italic hidden md:block">
               {{ gameMessage }}
             </div>
-          </div>
-          <div class="w-6/12 md:w-3/12">
             <div class="flex flex-row">
               <button
                 class="
@@ -115,15 +103,8 @@
 
               <button
                 @click="switchSound()"
-                class="
-                  ml-1
-                  p-2
-                  flex
-                  bg-blue-500
-                  text-white
-                  cursor-pointer
-                  rounded-md
-                "
+                class="ml-1 p-2 flex text-white cursor-pointer rounded-md"
+                :class="soundStatus === 'on' ? 'bg-blue-500' : 'bg-red-500'"
                 title="Toggle Sound"
               >
                 <VolumeUpIcon
@@ -133,6 +114,23 @@
                 />
                 <VolumeOffIcon
                   v-if="soundStatus !== 'on'"
+                  size="1.2x"
+                  class="flex"
+                />
+              </button>
+              <button
+                @click="switchFx()"
+                class="ml-1 p-2 flex text-white cursor-pointer rounded-md"
+                :class="fxStatus === 'on' ? 'bg-blue-500' : 'bg-red-500'"
+                title="Toggle Sound"
+              >
+                <StatusOnlineIcon
+                  v-if="fxStatus === 'on'"
+                  size="1.2x"
+                  class="flex"
+                />
+                <StatusOfflineIcon
+                  v-if="fxStatus !== 'on'"
                   size="1.2x"
                   class="flex"
                 />
@@ -371,6 +369,8 @@ import EndModal from '~/components/EndModal.vue'
 import HelpModal from '~/components/HelpModal.vue'
 
 import {
+  StatusOnlineIcon,
+  StatusOfflineIcon,
   TrashIcon,
   ShareIcon,
   PauseIcon,
@@ -388,6 +388,8 @@ import { Howl } from 'howler'
 
 export default {
   components: {
+    StatusOnlineIcon,
+    StatusOfflineIcon,
     ArrowCircleDownIcon,
     TrashIcon,
     ShareIcon,
@@ -462,6 +464,7 @@ export default {
 
       status: 'not-started', // Game status: 'started' 'not-started', 'paused', 'playing' or 'ended'
       soundStatus: 'on', // Sound status: 'on' or 'off'
+      fxStatus: 'on', // sound effects on or off
       sounds: {
         // Vars needed for sounds effects
         tapCorrect: new Howl({
@@ -679,6 +682,13 @@ export default {
       } else {
         this.soundStatus = 'on'
         if (this.status !== 'start') this.sounds.bg.play()
+      }
+    },
+    switchFx() {
+      if (this.fxStatus === 'on') {
+        this.fxStatus = 'off'
+      } else {
+        this.fxStatus = 'on'
       }
     },
     bonus(board) {
